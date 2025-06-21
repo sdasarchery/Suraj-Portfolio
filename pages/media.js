@@ -1,7 +1,28 @@
+import { useEffect } from 'react';
 import Layout from '../components/Layout';
 import styles from './media.module.scss';
 
 export default function Media() {
+  useEffect(() => {
+    // Load Facebook SDK if not already loaded
+    if (!window.FB) {
+      const script = document.createElement('script');
+      script.async = true;
+      script.defer = true;
+      script.crossOrigin = 'anonymous';
+      script.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0';
+      script.onload = () => {
+        if (window.FB) {
+          window.FB.XFBML.parse();
+        }
+      };
+      document.body.appendChild(script);
+    } else {
+      // If already loaded, just re-parse
+      window.FB.XFBML.parse();
+    }
+  }, []);
+
   return (
     <Layout>
       <h1>Media</h1>
@@ -22,8 +43,6 @@ export default function Media() {
           </blockquote>
         </div>
       </div>
-      {/* Facebook SDK Script */}
-      <script async defer crossOrigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0" nonce="fb"></script>
     </Layout>
   );
 }
