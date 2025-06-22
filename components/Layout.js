@@ -43,15 +43,13 @@ export default function Layout({ children }) {
           alignItems: 'center'
         }} className="logo-link" onClick={closeMenu}>
           <Image 
-            src="/LogoSurajNalam.png" 
+            src="/KarthikLogo.png" 
             alt="SurajBlog Logo" 
-            width={300}
+            width={200}
             height={100}
             style={{ borderRadius: '4px' }}
           />
-        </Link>
-
-        {/* Desktop Navigation - Centered */}
+        </Link>        {/* Desktop Navigation - Centered */}
         <div style={{ 
           display: 'flex', 
           alignItems: 'center',
@@ -59,31 +57,30 @@ export default function Layout({ children }) {
           left: '50%',
           transform: 'translateX(-50%)'
         }} className="desktop-nav">
-          <Link href="/biography" style={{ marginRight: 20, color: '#fff', textDecoration: 'none' }}>Biography</Link>
-          <Link href="/achievements" style={{ marginRight: 20, color: '#fff', textDecoration: 'none' }}>Achievements</Link>
-          <Link href="/media" style={{ marginRight: 20, color: '#fff', textDecoration: 'none' }}>Media</Link>
-          <Link href="/contact" style={{ color: '#fff', textDecoration: 'none' }}>Contact</Link>
+          <Link href="/biography" style={{ marginRight: 20, color: isScrolled ? '#fff' : '#ff6b35', textDecoration: 'none', transition: 'color 0.3s ease' }}>Biography</Link>
+          <Link href="/achievements" style={{ marginRight: 20, color: isScrolled ? '#fff' : '#ff6b35', textDecoration: 'none', transition: 'color 0.3s ease' }}>Achievements</Link>
+          <Link href="/media" style={{ marginRight: 20, color: isScrolled ? '#fff' : '#ff6b35', textDecoration: 'none', transition: 'color 0.3s ease' }}>Media</Link>
+          <Link href="/contact" style={{ color: isScrolled ? '#fff' : '#ff6b35', textDecoration: 'none', transition: 'color 0.3s ease' }}>Contact</Link>
         </div>
 
         {/* Right spacer for desktop to balance layout */}
-        <div style={{ width: '60px' }} className="right-spacer"></div>
-
-        {/* Mobile Menu Button */}
+        <div style={{ width: '60px' }} className="right-spacer"></div>        {/* Mobile Menu Button */}
         <button 
           onClick={toggleMenu}
           style={{
             display: 'none',
             background: 'none',
             border: 'none',
-            color: '#fff',
+            color: isScrolled ? '#fff' : '#ff6b35',
             fontSize: '1.5rem',
             cursor: 'pointer',
-            padding: '0.5rem'
+            padding: '0.5rem',
+            transition: 'color 0.3s ease'
           }}
           className="mobile-menu-btn"
         >
           {isMenuOpen ? '✕' : '☰'}
-        </button>        {/* Mobile Navigation Menu */}
+        </button>{/* Mobile Navigation Menu */}
         {isMenuOpen && (          <div style={{
             position: 'absolute',
             top: '100%',
