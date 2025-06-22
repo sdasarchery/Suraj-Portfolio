@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "ashok-feats-project"
-  }
+    "default": "ashok-feats-project",
+    "ashok-web": "ashok-feats-project"
+  },
+  "targets": {},
+  "etags": {}
 }
