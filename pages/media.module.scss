@@ -1,8 +1,59 @@
 .container {
-  max-width: 500px;
+  max-width: 1200px;
   margin: 2rem auto;
+  padding: 0 1rem;
 }
 
-.fbPage {
-  // Facebook plugin styles can be customized here if needed
+.instagramGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.instagramEmbed {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  
+  .instagram-media {
+    margin: 0 auto !important;
+  }
+}
+
+.embedPlaceholder {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  
+  p {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  ol {
+    text-align: left;
+    max-width: 300px;
+    margin: 0 auto;
+    
+    li {
+      margin-bottom: 0.5rem;
+      color: #6c757d;
+    }
+  }
+}
+
+// Responsive adjustments for Instagram embeds
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .instagramGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }

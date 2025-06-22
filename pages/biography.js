@@ -5,6 +5,7 @@ import { ref, listAll, getDownloadURL } from 'firebase/storage';
 
 export default function Biography() {
   const [images, setImages] = useState([]);
+  
   useEffect(() => {
     // Fetch images from Firebase Storage
     const fetchImagesFromFirebase = async () => {
@@ -33,29 +34,78 @@ export default function Biography() {
       <p>Learn about Suraj Nalam's early life, career, and legacy.</p>
       {images.length > 0 && (
         <div style={{ 
-          display: 'flex', 
-          overflowX: 'auto', 
-          gap: '1rem', 
-          padding: '2rem',
-          justifyContent: images.length <= 3 ? 'center' : 'flex-start'
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          overflow: 'hidden',
+          position: 'relative',
+          height: '400px',
+          marginTop: '2rem',
+          marginBottom: '2rem'
         }}>
-          {images.map((imageUrl, index) => (
-            <img
-              key={index}
-              src={imageUrl}
-              alt={`Biography image ${index + 1}`}
-              style={{ 
-                height: '300px', 
-                minWidth: '200px',
-                objectFit: 'cover', 
-                borderRadius: '8px',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-              }}
-              onError={(e) => {
-                e.target.style.display = 'none';
-              }}
-            />
-          ))}
+          {/* Continuous rotating gallery */}
+          <div style={{
+            display: 'flex',
+            animation: `scrollLeft ${images.length * 8}s linear infinite`,
+            width: `${images.length * 300}px`
+          }}>
+            {/* First set of images */}
+            {images.map((imageUrl, index) => (
+              <img
+                key={`first-${index}`}
+                src={imageUrl}
+                alt={`Biography image ${index + 1}`}
+                style={{ 
+                  width: '300px',
+                  height: '400px',
+                  objectFit: 'cover',
+                  marginRight: '20px',
+                  borderRadius: '12px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                  flexShrink: 0
+                }}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            ))}
+            {/* Duplicate set for seamless loop */}
+            {images.map((imageUrl, index) => (
+              <img
+                key={`second-${index}`}
+                src={imageUrl}
+                alt={`Biography image ${index + 1}`}
+                style={{ 
+                  width: '300px',
+                  height: '400px',
+                  objectFit: 'cover',
+                  marginRight: '20px',
+                  borderRadius: '12px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                  flexShrink: 0
+                }}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            ))}
+          </div>
+          
+          {/* CSS Animation */}
+          <style jsx>{`
+            @keyframes scrollLeft {
+              0% {
+                transform: translateX(0);
+              }
+              100% {
+                transform: translateX(-${images.length * 320}px);
+              }
+            }
+            
+            /* Pause animation on hover */
+            div:hover > div {
+              animation-play-state: paused;
+            }
+          `}</style>
         </div>
       )}
       {images.length === 0 && (
