@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Layout({ children }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [isScrolled, setIsScrolled] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -13,15 +13,30 @@ export default function Layout({ children }) {
     setIsMenuOpen(false);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>      <nav style={{ 
         padding: '1rem', 
-        background: '#f57e42', 
+        background: isScrolled ? '#f57e42' : 'transparent', 
         color: '#fff', 
         display: 'flex', 
         alignItems: 'center',
         justifyContent: 'space-between',
-        position: 'relative'
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        transition: 'background-color 0.3s ease'
       }}>{/* Logo - Left on desktop, centered on mobile */}
         <Link href="/" style={{ 
           display: 'flex', 
@@ -68,20 +83,19 @@ export default function Layout({ children }) {
           className="mobile-menu-btn"
         >
           {isMenuOpen ? '✕' : '☰'}
-        </button>
-
-        {/* Mobile Navigation Menu */}
+        </button>        {/* Mobile Navigation Menu */}
         {isMenuOpen && (          <div style={{
             position: 'absolute',
             top: '100%',
             left: '0',
             right: '0',
-            background: '#ffb366',
+            background: isScrolled ? '#ffb366' : 'rgba(255, 179, 102, 0.95)',
             display: 'flex',
             flexDirection: 'column',
             padding: '1rem',
             borderTop: '1px solid #ff9933',
-            zIndex: 1000
+            zIndex: 1000,
+            backdropFilter: 'blur(10px)'
           }} className="mobile-nav">
             <Link 
               href="/biography" 
@@ -113,9 +127,18 @@ export default function Layout({ children }) {
             </Link>
           </div>
         )}
-      </nav>      {/* CSS for responsive behavior */}
-      <style jsx>{`
+      </nav>      {/* CSS for responsive behavior */}      <style jsx>{`
         @media (max-width: 768px) {
+          nav {
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            background: #f57e42 !important;
+          }
+          main {
+            padding-top: 2rem !important;
+          }
           .desktop-nav {
             display: none !important;
           }
@@ -167,7 +190,7 @@ export default function Layout({ children }) {
         }
       `}</style>
 
-      <main style={{ padding: '2rem' }}>{children}</main>
+      <main style={{ paddingTop: '140px', padding: '140px 2rem 2rem 2rem' }}>{children}</main>
     </>
   );
 }

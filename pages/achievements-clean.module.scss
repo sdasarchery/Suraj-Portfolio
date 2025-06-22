@@ -366,25 +366,6 @@
   font-weight: bold;
 }
 
-// Real-time indicator styles
-.realtimeIndicator {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #28a745;
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-top: 1rem;
-  
-  .liveDot {
-    width: 8px;
-    height: 8px;
-    background-color: #28a745;
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-}
-
 // Animations
 @keyframes fadeInUp {
   from {
@@ -412,21 +393,6 @@
   }
   100% {
     background-position: -200% 0;
-  }
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.2);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 

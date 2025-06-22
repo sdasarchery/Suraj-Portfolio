@@ -1,116 +1,180 @@
 import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import styles from './achievements.module.scss';
+import { 
+  AchievementCard, 
+  TypewriterText, 
+  Timeline, 
+  LoadingSkeleton 
+} from '../components/AchievementComponentsFixed';
+import { useAchievements, useAchievementStats } from '../hooks/useAchievements';
+
+// Fallback data for offline/error scenarios
+const fallbackAchievementsData = {
+  achievements: [
+    {
+      category: "World Records",
+      items: [
+        "Fastest 100m sprint in regional championship - 10.2 seconds",
+        "Long jump record at state level - 7.5 meters",
+        "Marathon completion time - 2 hours 45 minutes"
+      ]
+    },
+    {
+      category: "Medals and Awards",
+      items: [
+        "Gold Medal - State Swimming Championship 2024",
+        "Silver Medal - National Athletics Meet 2023",
+        "Bronze Medal - Inter-college Sports Festival 2022"
+      ]
+    },
+    {
+      category: "Academic Achievements",
+      items: [
+        "Dean's List for 4 consecutive semesters",
+        "Outstanding Student Award 2023",
+        "Research Paper published in International Journal"
+      ]
+    },
+    {
+      category: "Special Recognition",
+      items: [
+        "Recognized by the Sports Authority for exceptional performance",
+        "Awarded scholarship for academic excellence and sportsmanship",
+        "Featured in local newspaper for community service activities"
+      ]
+    }
+  ]
+};
 
 export default function Achievements() {
-  const [textContent, setTextContent] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [debugInfo, setDebugInfo] = useState('');  useEffect(() => {
-    fetchTextFile();
-  }, []);
-
-  const testConnection = () => {
-    setDebugInfo('Testing connection...');
-    fetchTextFile();
-  };const fetchTextFile = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      setDebugInfo('Fetching achievements content from API...');
-      
-      // Use our API endpoint to avoid CORS issues
-      const response = await fetch('/api/achievements');
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      setTextContent(data.content);
-      setDebugInfo('Content loaded successfully from API!');
-      
-    } catch (err) {
-      console.error('Error fetching text file:', err);
-      setDebugInfo(`Error occurred: ${err.message}`);
-      
-      // Handle different types of errors
-      if (err.message.includes('404') || err.message.includes('File not found')) {
-        setError('File not found: Make sure "achievements.txt" exists in the "achievements/" folder in Firebase Storage.');
-      } else if (err.message.includes('403') || err.message.includes('Permission denied')) {
-        setError('Permission denied: Check Firebase Storage security rules to ensure read access is allowed.');
-      } else if (err.message.includes('Failed to fetch')) {
-        setError('Network error: Please check your internet connection and try again.');
-      } else {
-        setError(`Error loading achievements: ${err.message}`);
-      }
-    } finally {
-      setLoading(false);
+  const [visibleSections, setVisibleSections] = useState([]);
+  
+  // Use Firestore data with real-time updates and fallback
+  const { 
+    data: achievementsData, 
+    loading, 
+    error, 
+    refetch 
+  } = useAchievements({ 
+    realtime: true, 
+    fallbackData: fallbackAchievementsData.achievements 
+  });
+  
+  // Get achievement statistics
+  const { stats } = useAchievementStats();
+  
+  useEffect(() => {
+    // Animate sections appearing when data is loaded
+    if (achievementsData && achievementsData.length > 0) {
+      achievementsData.forEach((_, index) => {
+        setTimeout(() => {
+          setVisibleSections(prev => [...prev, index]);
+        }, index * 300);
+      });
     }
-  };
-  const formatTextContent = (content) => {
-    // Split content into paragraphs and format
-    return content.split('\n').map((line, index) => {
-      const trimmedLine = line.trim();
-      if (!trimmedLine) return <br key={index} />;
-      
-      // Check if line looks like a heading (starts with # or is all caps)
-      if (trimmedLine.startsWith('#') || (trimmedLine === trimmedLine.toUpperCase() && trimmedLine.length > 3)) {
-        return <h3 key={index} className={styles.contentHeading}>{trimmedLine.replace(/^#+\s*/, '')}</h3>;
-      }
-      
-      // Check if line looks like a bullet point
-      if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || trimmedLine.startsWith('*')) {
-        return <li key={index} className={styles.bulletPoint}>{trimmedLine.replace(/^[•\-*]\s*/, '')}</li>;
-      }
-      
-      // Regular paragraph
-      return <p key={index} className={styles.contentParagraph}>{trimmedLine}</p>;
-    });
-  };
+  }, [achievementsData]);  // Timeline data for interactive display
+  const timelineData = achievementsData ? achievementsData.map(section => ({
+    title: section.category,
+    description: `Outstanding accomplishments in ${section.category.toLowerCase()}`,
+    count: section.items.length
+  })) : [];
 
+  // Show loading state
   if (loading) {
     return (
       <Layout>
         <div className={styles.container}>
           <h1>Achievements</h1>
-          <div className={styles.loading}>Loading achievements documents...</div>
+          <LoadingSkeleton lines={8} />
         </div>
       </Layout>
     );
   }
-  if (error) {
+
+  // Show error state with fallback option
+  if (error && !achievementsData) {
     return (
       <Layout>
         <div className={styles.container}>
           <h1>Achievements</h1>
-          <div className={styles.error}>{error}</div>
-          {debugInfo && (
-            <div className={styles.debug}>
-              <p><strong>Debug Info:</strong> {debugInfo}</p>
-            </div>
-          )}          <button 
-            onClick={testConnection} 
-            className={styles.retryButton}
-          >
-            Retry Loading
-          </button>
+          <div className={styles.error}>
+            <p>Unable to load achievements: {error}</p>
+            <button 
+              onClick={refetch} 
+              className={styles.retryButton}
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </Layout>
     );
   }
+
   return (
     <Layout>
       <div className={styles.container}>
-        <h1>Achievements</h1>
-        <p>Discover Suraj Nalam's world records and medals.</p>
+        <h1 className={styles.title}>
+          <TypewriterText text="Achievements" speed={80} />
+        </h1>
+        <p className={styles.subtitle}>
+          <TypewriterText 
+            text="Discover Suraj Nalam's world records and medals." 
+            speed={40}
+            delay={1200}
+          />
+        </p>        
+        {/* Dynamic Achievement Cards */}
+        <div className={styles.achievementsGrid}>
+          {achievementsData && achievementsData.map((section, index) => (
+            <AchievementCard
+              key={index}
+              title={section.category}
+              items={section.items}
+              delay={index * 200}
+              animationType={index % 2 === 0 ? 'slideUp' : 'slideLeft'}
+            />
+          ))}
+        </div>
+
+        {/* Interactive Timeline */}
+        <div className={styles.timelineSection}>
+          <h2>
+            <TypewriterText text="Achievement Timeline" delay={2000} />
+          </h2>
+          <Timeline items={timelineData} />
+        </div>
         
-        {textContent && (
-          <div className={styles.textContent}>
-            {formatTextContent(textContent)}
+        {/* Quick Stats */}
+        <div className={styles.statsSection}>
+          {/* <div className={styles.statCard}>
+            <span className={styles.statNumber}>
+              <TypewriterText 
+                text={stats.totalCategories.toString()} 
+                delay={3000}
+              />
+            </span>
+            <span className={styles.statLabel}>Categories</span>
           </div>
-        )}
+          <div className={styles.statCard}>
+            <span className={styles.statNumber}>
+              <TypewriterText 
+                text={stats.totalAchievements.toString()} 
+                delay={3200}
+              />
+            </span>
+            <span className={styles.statLabel}>Total Achievements</span>
+          </div> */}
+          
+          {/* Show real-time indicator if using live data */}
+          {/* {!loading && (
+            <div className={styles.realtimeIndicator}>
+              <span className={styles.liveDot}></span>
+              Live Data
+            </div>
+          )} */}
+        </div>
       </div>
     </Layout>
   );

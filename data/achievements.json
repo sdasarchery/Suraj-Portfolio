@@ -1,0 +1,44 @@
+{
+  "achievements": [
+    {
+      "category": "World Records",
+      "items": [
+        "Fastest 100m sprint in regional championship - 10.2 seconds",
+        "Long jump record at state level - 7.5 meters",
+        "Marathon completion time - 2 hours 45 minutes"
+      ]
+    },
+    {
+      "category": "Medals and Awards",
+      "items": [
+        "Gold Medal - State Swimming Championship 2024",
+        "Silver Medal - National Athletics Meet 2023",
+        "Bronze Medal - Inter-college Sports Festival 2022"
+      ]
+    },
+    {
+      "category": "Academic Achievements",
+      "items": [
+        "Dean's List for 4 consecutive semesters",
+        "Outstanding Student Award 2023",
+        "Research Paper published in International Journal"
+      ]
+    },
+    {
+      "category": "Special Recognition",
+      "items": [
+        "Recognized by the Sports Authority for exceptional performance in athletics",
+        "Awarded scholarship for academic excellence and sportsmanship",
+        "Featured in local newspaper for community service activities"
+      ]
+    },
+    {
+      "category": "Future Goals",
+      "items": [
+        "Qualify for national championships",
+        "Complete advanced sports training program",
+        "Mentor young athletes in the community"
+      ]
+    }
+  ]
+}

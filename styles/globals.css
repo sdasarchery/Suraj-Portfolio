@@ -1,8 +1,13 @@
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Segoe UI', Arial, sans-serif;
   background: #f5f5f5;
   color: #222;
+}
+html {
+  margin: 0;
+  padding: 0;
 }
 a {
   color: inherit;
