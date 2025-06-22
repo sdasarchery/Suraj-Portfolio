@@ -60,7 +60,7 @@ export default function Biography() {
       )}
       {images.length === 0 && (
         <div style={{color: 'red', textAlign: 'center', marginTop: '2rem'}}>
-          No images found or failed to load images.
+          loading images.
         </div>
       )}
     </Layout>
