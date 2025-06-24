@@ -4,7 +4,7 @@ export default function Contact() {
   return (
     <Layout>
       <h1>Contact</h1>
-      <p>Get in touch with Suraj Nalam's team, please leave a message.</p>
+      <p>Get in touch with Suraj Nalam's team, Please leave a message.</p>
       <form style={{ maxWidth: 400, margin: '2rem auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <input type="text" name="name" placeholder="Your Name" required style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #ccc' }} />
         <input type="email" name="email" placeholder="Your Email" required style={{ padding: '0.5rem', borderRadius: 4, border: '1px solid #ccc' }} />

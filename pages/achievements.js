@@ -16,16 +16,17 @@ const fallbackAchievementsData = {
       category: "World Records",
       items: [
         "Fastest 100m sprint in regional championship - 10.2 seconds",
-        "Long jump record at state level - 7.5 meters",
+        "Long jump record at state level - 00000000 meters",
         "Marathon completion time - 2 hours 45 minutes"
       ]
     },
     {
       category: "Medals and Awards",
       items: [
-        "Gold Medal - State Swimming Championship 2024",
-        "Silver Medal - National Athletics Meet 2023",
-        "Bronze Medal - Inter-college Sports Festival 2022"
+        "SoCal Showdown 2025 --> Cadet Compound Men Top scorer in qualification Silver in Eliminations",
+        "2025 Apr - Youth World Trials Florida - Bronze",
+        "2025 Apr - Gator Cup - Florida - Bronze",
+        "2025 Apr - Arizona Cup - Silver",
       ]
     },
     {
