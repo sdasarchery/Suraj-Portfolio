@@ -43,9 +43,9 @@ export default function Layout({ children }) {
           alignItems: 'center'
         }} className="logo-link" onClick={closeMenu}>
           <Image 
-            src="/KarthikLogo.png" 
+            src="/archery_target.png" 
             alt="SurajBlog Logo" 
-            width={200}
+            width={100}
             height={100}
             style={{ borderRadius: '4px' }}
           />

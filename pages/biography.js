@@ -30,8 +30,27 @@ export default function Biography() {
   }, []);
 
   return (
-    <Layout>      <h1>Biography</h1>
-      <p>Learn about Suraj Nalam's early life, career, and legacy.</p>
+    <Layout>      
+      <h1 style={{ textAlign:'center'}}>Biography</h1>
+      <p style={{ textAlign:'center'}}>Learn about Suraj Nalam's early life, career, and legacy.</p>
+      <div className='header-image-container'>
+        <img src='/header_image.png'
+        className='header-image'
+          style={{ 
+            textAlign: 'center', 
+            marginTop: '2rem' ,
+            marginLeft: 'calc(-45vw + 55%)',
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+         />
+         <div>
+          <h2 style={{ textAlign: 'center', marginTop: '1rem' }}>Suraj Nalam</h2>
+          <p style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+            Suraj Nalam About
+          </p>
+         </div>
+      </div>
       {images.length > 0 && (
         <div style={{ 
           width: '100vw',
@@ -116,3 +135,8 @@ export default function Biography() {
     </Layout>
   );
 }
+
+
+
+//marginRight: 'calc(-50vw + 50%)',
+//
