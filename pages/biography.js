@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState , useRef } from 'react';
 import Layout from '../components/Layout';
 import { storage } from '../lib/firebase';
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
+import React from 'react';
+
 
 export default function Biography() {
   const [images, setImages] = useState([]);
@@ -29,6 +31,14 @@ export default function Biography() {
     };    fetchImagesFromFirebase();
   }, []);
 
+function VideoPlayer() {
+  const videoRef = useRef(null); // reference to the <video> element
+
+  const handlePlay = () => {
+    videoRef.current.play(); // this starts the video
+  };
+
+
   return (
     <Layout>      
       <h1 style={{ textAlign:'center'}}>Biography</h1>
@@ -48,6 +58,12 @@ export default function Biography() {
           <h2 style={{ textAlign: 'center', marginTop: '1rem' }}>Suraj Nalam</h2>
           <p style={{ textAlign: 'center', marginTop: '0.5rem' }}>
             Suraj Nalam About
+            <div>
+              <video ref={videoRef} width="640" height="360">
+                <source src="video.mp4" type="video/mp4" />
+              </video>
+              <button onClick={handlePlay}>Play Video</button>
+          </div>
           </p>
          </div>
       </div>
@@ -139,4 +155,3 @@ export default function Biography() {
 
 
 //marginRight: 'calc(-50vw + 50%)',
-//
