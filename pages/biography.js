@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { storage } from '../lib/firebase';
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
+import styles from './biography.module.scss';
 
 export default function Biography() {
   const [images, setImages] = useState([]);
@@ -31,106 +32,45 @@ export default function Biography() {
 
   return (
     <Layout>      
-      <h1 style={{ textAlign:'center'}}>Biography</h1>
-      <p style={{ textAlign:'center'}}>Learn about Suraj Nalam's early life, career, and legacy.</p>
-      <div className='header-image-container'>
-        <img src='/header_image.png'
-        className='header-image'
-          style={{ 
-            textAlign: 'center', 
-            marginTop: '2rem' ,
-            marginLeft: 'calc(-45vw + 55%)',
-            overflow: 'hidden',
-            position: 'relative',
-          }}
-         />
-         <div>
-          <h2 style={{ textAlign: 'center', marginTop: '1rem' }}>Suraj Nalam</h2>
-          <p style={{ textAlign: 'center', marginTop: '0.5rem' }}>
-            Suraj Nalam About
-          </p>
-         </div>
+      <h1 className={styles.title}>Biography</h1>
+      <p className={styles.description}>Learn about Suraj Nalam's early life, career, and legacy.</p>
+      <div className={styles.headerImageContainer}>
+        <img src='/header_image.png' className={styles.headerImage} alt="Header" />
+        <div className={styles.headerText}>
+          <h2>Suraj Nalam</h2>
+          <p>Suraj Nalam About</p>
+        </div>
       </div>
       {images.length > 0 && (
-        <div style={{ 
-          width: '100vw',
-          marginLeft: 'calc(-50vw + 50%)',
-          overflow: 'hidden',
-          position: 'relative',
-          height: '400px',
-          marginTop: '2rem',
-          marginBottom: '2rem'
-        }}>
-          {/* Continuous rotating gallery */}
-          <div style={{
-            display: 'flex',
-            animation: `scrollLeft ${images.length * 8}s linear infinite`,
-            width: `${images.length * 300}px`
-          }}>
-            {/* First set of images */}
+        <div className={styles.galleryContainer}>
+          <div className={styles.gallery}>
             {images.map((imageUrl, index) => (
               <img
                 key={`first-${index}`}
                 src={imageUrl}
                 alt={`Biography image ${index + 1}`}
-                style={{ 
-                  width: '300px',
-                  height: '400px',
-                  objectFit: 'cover',
-                  marginRight: '20px',
-                  borderRadius: '12px',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                  flexShrink: 0
-                }}
+                className={styles.galleryImage}
                 onError={(e) => {
                   e.target.style.display = 'none';
                 }}
               />
             ))}
-            {/* Duplicate set for seamless loop */}
             {images.map((imageUrl, index) => (
               <img
                 key={`second-${index}`}
                 src={imageUrl}
                 alt={`Biography image ${index + 1}`}
-                style={{ 
-                  width: '300px',
-                  height: '400px',
-                  objectFit: 'cover',
-                  marginRight: '20px',
-                  borderRadius: '12px',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                  flexShrink: 0
-                }}
+                className={styles.galleryImage}
                 onError={(e) => {
                   e.target.style.display = 'none';
                 }}
               />
             ))}
           </div>
-          
-          {/* CSS Animation */}
-          <style jsx>{`
-            @keyframes scrollLeft {
-              0% {
-                transform: translateX(0);
-              }
-              100% {
-                transform: translateX(-${images.length * 320}px);
-              }
-            }
-            
-            /* Pause animation on hover */
-            div:hover > div {
-              animation-play-state: paused;
-            }
-          `}</style>
         </div>
       )}
       {images.length === 0 && (
-        <div style={{color: 'red', textAlign: 'center', marginTop: '2rem'}}>
-          loading images.
-        </div>
+        <div className={styles.loadingMessage}>Loading images...</div>
       )}
     </Layout>
   );

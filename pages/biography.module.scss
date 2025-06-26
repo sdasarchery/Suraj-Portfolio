@@ -2,3 +2,78 @@
   max-width: 600px;
   margin: 2rem auto;
 }
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.description {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #666;
+}
+
+.headerImageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.headerImage {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.headerText {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.galleryContainer {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.gallery {
+  display: flex;
+  animation: scrollLeft 20s linear infinite;
+}
+
+.galleryImage {
+  width: 300px;
+  height: 400px;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.loadingMessage {
+  color: red;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.gallery:hover {
+  animation-play-state: paused;
+}
