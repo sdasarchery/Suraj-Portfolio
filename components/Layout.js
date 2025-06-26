@@ -71,7 +71,7 @@ export default function Layout({ children }) {
             display: 'none',
             background: 'none',
             border: 'none',
-            color: isScrolled ? '#fff' : '#ff6b35',
+            color: '#fff',
             fontSize: '1.5rem',
             cursor: 'pointer',
             padding: '0.5rem',
