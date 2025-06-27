@@ -1,7 +1,8 @@
-import { useEffect, useState , useRef } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import { storage } from '../lib/firebase';
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
+import styles from './biography.module.scss';
 
 export default function Biography() {
   const [images, setImages] = useState([]);
@@ -29,35 +30,16 @@ export default function Biography() {
     };    fetchImagesFromFirebase();
   }, []);
 
-function VideoPlayer() {
-  const videoRef = useRef(null); // reference to the <video> element
-
-  const handlePlay = () => {
-    videoRef.current.play(); // this starts the video
-  };
-
-
   return (
     <Layout>      
-      <h1 style={{ textAlign:'center'}}>Biography</h1>
-      <p style={{ textAlign:'center'}}>Learn about Suraj Nalam's early life, career, and legacy.</p>
-      <div className='header-image-container'>
-        <img src='/header_image.png'
-        className='header-image'
-          style={{ 
-            textAlign: 'center', 
-            marginTop: '2rem' ,
-            marginLeft: 'calc(-45vw + 55%)',
-            overflow: 'hidden',
-            position: 'relative',
-          }}
-         />
-         <div>
-          <h2 style={{ textAlign: 'center', marginTop: '1rem' }}>Suraj Nalam</h2>
-          <p style={{ textAlign: 'center', marginTop: '0.5rem' }}>
-            Suraj Nalam About
-          </p>
-         </div>
+      <h1 className={styles.title}>Biography</h1>
+      <p className={styles.description}>Learn about Suraj Nalam's early life, career, and legacy.</p>
+      <div className={styles.headerImageContainer}>
+        <img src='/header_image.png' className={styles.headerImage} alt="Header" />
+        <div className={styles.headerText}>
+          <h2>Suraj Nalam</h2>
+          <p>Suraj Nalam About</p>
+        </div>
       </div>
       {images.length > 0 && (
         <div className={styles.galleryContainer}>
@@ -94,4 +76,7 @@ function VideoPlayer() {
   );
 }
 
-}
+
+
+//marginRight: 'calc(-50vw + 50%)',
+//

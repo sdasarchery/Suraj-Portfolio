@@ -26,7 +26,7 @@ export default function Layout({ children }) {
   return (
     <>      <nav style={{ 
         padding: '1rem', 
-        background: isScrolled ? '#f57e42' : 'transparent', 
+        background: isScrolled ? '#f57e42' : (isMenuOpen ? '#f57e42' : 'transparent'), 
         color: '#fff', 
         display: 'flex', 
         alignItems: 'center',
@@ -36,8 +36,28 @@ export default function Layout({ children }) {
         left: 0,
         right: 0,
         zIndex: 1000,
-        transition: 'background-color 0.3s ease'
-      }}>{/* Logo - Left on desktop, centered on mobile */}
+        transition: 'background-color 0.3s ease',
+        height: '80px'
+      }}>
+        {/* Mobile Menu Button - Left side on mobile */}
+        <button 
+          onClick={toggleMenu}
+          style={{
+            display: 'none',
+            background: 'none',
+            border: 'none',
+            color: '#fff',
+            fontSize: '1.5rem',
+            cursor: 'pointer',
+            padding: '0.5rem',
+            transition: 'color 0.3s ease'
+          }}
+          className="mobile-menu-btn"
+        >
+          {isMenuOpen ? '✕' : '☰'}
+        </button>
+
+        {/* Logo - Left on desktop, right on mobile */}
         <Link href="/" style={{ 
           display: 'flex', 
           alignItems: 'center'
@@ -49,7 +69,9 @@ export default function Layout({ children }) {
             height={100}
             style={{ borderRadius: '4px' }}
           />
-        </Link>        {/* Desktop Navigation - Centered */}
+        </Link>        
+
+        {/* Desktop Navigation - Centered */}
         <div style={{ 
           display: 'flex', 
           alignItems: 'center',
@@ -64,23 +86,7 @@ export default function Layout({ children }) {
         </div>
 
         {/* Right spacer for desktop to balance layout */}
-        <div style={{ width: '60px' }} className="right-spacer"></div>        {/* Mobile Menu Button */}
-        <button 
-          onClick={toggleMenu}
-          style={{
-            display: 'none',
-            background: 'none',
-            border: 'none',
-            color: isScrolled ? '#fff' : '#ff6b35',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            padding: '0.5rem',
-            transition: 'color 0.3s ease'
-          }}
-          className="mobile-menu-btn"
-        >
-          {isMenuOpen ? '✕' : '☰'}
-        </button>{/* Mobile Navigation Menu */}
+        <div style={{ width: '60px' }} className="right-spacer"></div>{/* Mobile Navigation Menu */}
         {isMenuOpen && (          <div style={{
             position: 'absolute',
             top: '100%',
@@ -127,14 +133,20 @@ export default function Layout({ children }) {
       </nav>      {/* CSS for responsive behavior */}      <style jsx>{`
         @media (max-width: 768px) {
           nav {
-            position: relative !important;
-            top: auto !important;
-            left: auto !important;
-            right: auto !important;
-            background: #f57e42 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            background: ${isScrolled ? '#f57e42' : (isMenuOpen ? '#f57e42' : 'transparent')} !important;
+            z-index: 1000 !important;
+            height: 80px !important;
+            padding: 1rem !important;
+            display: block !important;
+            justify-content: unset !important;
+            transition: background-color 0.3s ease !important;
           }
           main {
-            padding-top: 2rem !important;
+            padding-top: 140px !important;
           }
           .desktop-nav {
             display: none !important;
@@ -145,20 +157,24 @@ export default function Layout({ children }) {
             right: 1rem !important;
             top: 50% !important;
             transform: translateY(-50%) !important;
+            color: #fff !important;
           }
           .right-spacer {
-            display: none;
+            display: none !important;
           }
           .logo-link {
             position: absolute !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            width: 60px !important;
-            height: 60px !important;
+            left: 1rem !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            width: 30px !important;
+            height: 30px !important;
+            margin: 0 !important;
+            display: block !important;
           }
           .logo-link img {
-            width: 60px !important;
-            height: 60px !important;
+            width: 30px !important;
+            height: 30px !important;
           }
         }
         @media (min-width: 769px) {
@@ -177,6 +193,7 @@ export default function Layout({ children }) {
             transform: none !important;
             width: 25vw !important;
             height: auto !important;
+            order: 1;
           }
           .logo-link img {
             width: 100% !important;

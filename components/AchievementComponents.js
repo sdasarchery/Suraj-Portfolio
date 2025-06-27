@@ -196,21 +196,15 @@ export const LoadingSkeleton = ({ lines = 5, height = '20px' }) => {
   );
 };
 
-export const Timeline = ({ items }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex(prev => (prev + 1) % items.length);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [items.length]);
+export const Timeline = ({ items = [], events = [] }) => {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const timelineData = items.length > 0 ? items : events;
 
   const containerStyle = {
     position: 'relative',
-    maxWidth: '600px',
-    margin: '0 auto'
+    maxWidth: '900px',
+    margin: '3rem auto',
+    padding: '2rem 1rem'
   };
 
   const lineStyle = {
@@ -221,66 +215,206 @@ export const Timeline = ({ items }) => {
     bottom: 0,
     width: '4px',
     background: 'linear-gradient(180deg, #f57e42, #ff9933)',
-    borderRadius: '2px'
+    borderRadius: '2px',
+    boxShadow: '0 0 10px rgba(245, 126, 66, 0.3)'
   };
 
   const itemStyle = (index) => ({
     display: 'flex',
-    alignItems: 'center',
-    marginBottom: '2rem',
+    alignItems: 'stretch',
+    marginBottom: '3rem',
     position: 'relative',
     cursor: 'pointer',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)',
     flexDirection: index % 2 === 0 ? 'row' : 'row-reverse'
   });
 
   const markerStyle = (index) => ({
-    width: '20px',
-    height: '20px',
-    background: '#f57e42',
+    width: '26px',
+    height: '26px',
+    background: index === activeIndex ? '#ff6b35' : '#f57e42',
     borderRadius: '50%',
     border: '4px solid white',
-    boxShadow: `0 0 0 ${index === activeIndex ? '8px' : '4px'} ${
-      index === activeIndex ? 'rgba(245, 126, 66, 0.3)' : '#f57e42'
+    boxShadow: `0 0 0 ${index === activeIndex ? '12px' : '6px'} ${
+      index === activeIndex ? 'rgba(255, 107, 53, 0.2)' : 'rgba(245, 126, 66, 0.1)'
     }`,
-    zIndex: 1,
+    zIndex: 2,
     position: 'relative',
-    transition: 'all 0.3s ease',
-    transform: index === activeIndex ? 'scale(1.2)' : 'scale(1)'
+    transition: 'all 0.4s ease',
+    transform: index === activeIndex ? 'scale(1.3)' : 'scale(1)',
+    alignSelf: 'flex-start',
+    marginTop: '1.5rem'
   });
 
   const contentStyle = (index) => ({
-    background: 'white',
-    padding: '1.5rem',
-    borderRadius: '12px',
-    boxShadow: `0 ${index === activeIndex ? '15px 30px' : '5px 15px'} rgba(0, 0, 0, ${index === activeIndex ? '0.2' : '0.1'})`,
-    maxWidth: '250px',
-    transition: 'all 0.3s ease',
-    transform: index === activeIndex ? 'scale(1.05)' : 'scale(1)',
-    margin: index % 2 === 0 ? '0 0 0 2rem' : '0 2rem 0 0',
-    textAlign: index % 2 === 0 ? 'left' : 'right'
+    background: 'linear-gradient(135deg, #ffffff 0%, #fafafa 100%)',
+    padding: '0',
+    borderRadius: '20px',
+    boxShadow: index === activeIndex 
+      ? '0 25px 50px rgba(0, 0, 0, 0.15)' 
+      : '0 10px 25px rgba(0, 0, 0, 0.08)',
+    width: '380px',
+    transition: 'all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)',
+    transform: index === activeIndex ? 'scale(1.05) translateY(-5px)' : 'scale(1)',
+    margin: index % 2 === 0 ? '0 0 0 3rem' : '0 3rem 0 0',
+    textAlign: 'left',
+    border: `2px solid ${index === activeIndex ? '#f57e42' : 'transparent'}`,
+    overflow: 'hidden'
   });
+
+  const imageStyle = {
+    width: '100%',
+    height: '180px',
+    objectFit: 'cover',
+    display: 'block',
+    borderRadius: '18px 18px 0 0'
+  };
+
+  const contentBodyStyle = {
+    padding: '1.75rem'
+  };
+
+  const dateStyle = {
+    fontSize: '0.85rem',
+    color: '#f57e42',
+    fontWeight: 'bold',
+    marginBottom: '0.75rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px'
+  };
+
+  const titleStyle = {
+    margin: '0 0 1rem 0',
+    color: '#333',
+    fontSize: '1.4rem',
+    lineHeight: '1.3',
+    fontWeight: 'bold'
+  };
+
+  const descriptionStyle = {
+    margin: '0 0 1.25rem 0',
+    color: '#666',
+    fontSize: '0.95rem',
+    lineHeight: '1.6'
+  };
+
+  const detailsGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '0.75rem',
+    borderTop: '2px solid #f0f0f0',
+    paddingTop: '1.25rem',
+    marginTop: '1.25rem'
+  };
+
+  const detailItemStyle = {
+    fontSize: '0.85rem',
+    color: '#555',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '0.5rem',
+    background: 'rgba(245, 126, 66, 0.05)',
+    borderRadius: '8px',
+    border: '1px solid rgba(245, 126, 66, 0.1)'
+  };
+
+  const badgeStyle = {
+    display: 'inline-block',
+    background: 'linear-gradient(135deg, #f57e42, #ff9933)',
+    color: 'white',
+    padding: '0.4rem 1rem',
+    borderRadius: '25px',
+    fontSize: '0.8rem',
+    fontWeight: 'bold',
+    marginTop: '1rem',
+    boxShadow: '0 4px 15px rgba(245, 126, 66, 0.3)'
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (e) {
+      return dateString;
+    }
+  };
 
   return (
     <div style={containerStyle}>
       <div style={lineStyle} />
-      {items.map((item, index) => (
+      {timelineData.map((item, index) => (
         <div 
           key={index}
           style={itemStyle(index)}
-          onClick={() => setActiveIndex(index)}
+          onMouseEnter={() => setActiveIndex(index)}
+          onMouseLeave={() => setActiveIndex(null)}
         >
           <div style={markerStyle(index)} />
           <div style={contentStyle(index)}>
-            <h3 style={{ margin: '0 0 0.5rem 0', color: '#f57e42', fontSize: '1.1rem' }}>
-              {item.title}
-            </h3>
-            <p style={{ margin: '0 0 0.5rem 0', color: '#666', fontSize: '0.9rem' }}>
-              {item.description}
-            </p>
-            <span style={{ fontSize: '0.8rem', color: '#f57e42', fontWeight: 'bold' }}>
-              {item.count} achievements
-            </span>
+            {item.image && (
+              <img 
+                src={item.image} 
+                alt={item.title || item.blogDisplay || 'Achievement'} 
+                style={imageStyle}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            )}
+            <div style={contentBodyStyle}>
+              <p style={dateStyle}>{formatDate(item.date)}</p>
+              <h3 style={titleStyle}>
+                {item.title || item.blogDisplay}
+              </h3>
+              <p style={descriptionStyle}>
+                {item.description}
+              </p>
+              
+              <div style={detailsGridStyle}>
+                {item.venue && (
+                  <div style={detailItemStyle}>
+                    <span>📍</span>
+                    <span><strong>Venue:</strong> {item.venue}</span>
+                  </div>
+                )}
+                {item.coach && (
+                  <div style={detailItemStyle}>
+                    <span>👤</span>
+                    <span><strong>Coach:</strong> {item.coach}</span>
+                  </div>
+                )}
+                {item.bestScore && (
+                  <div style={detailItemStyle}>
+                    <span>🏆</span>
+                    <span><strong>Best Score:</strong> {item.bestScore}</span>
+                  </div>
+                )}
+                {item.year && (
+                  <div style={detailItemStyle}>
+                    <span>📅</span>
+                    <span><strong>Year:</strong> {item.year}</span>
+                  </div>
+                )}
+              </div>
+              
+              {item.count && (
+                <div style={badgeStyle}>
+                  {item.count} {item.count === 1 ? 'Achievement' : 'Achievements'}
+                </div>
+              )}
+              {item.worthNoticing && (
+                <div style={badgeStyle}>
+                  Worth Noting: {item.worthNoticing}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ))}

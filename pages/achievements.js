@@ -8,6 +8,8 @@ import {
   LoadingSkeleton 
 } from '../components/AchievementComponentsFixed';
 import { useAchievements, useAchievementStats } from '../hooks/useAchievements';
+import { collection, query, orderBy, getDocs } from 'firebase/firestore';
+import { firestore } from '../lib/firebase';
 
 // Fallback data for offline/error scenarios
 const fallbackAchievementsData = {
@@ -50,7 +52,8 @@ const fallbackAchievementsData = {
 
 export default function Achievements() {
   const [visibleSections, setVisibleSections] = useState([]);
-  
+  const [timelineData, setTimelineData] = useState([]);
+
   // Use Firestore data with real-time updates and fallback
   const { 
     data: achievementsData, 
@@ -61,10 +64,39 @@ export default function Achievements() {
     realtime: true, 
     fallbackData: fallbackAchievementsData.achievements 
   });
-  
+
   // Get achievement statistics
   const { stats } = useAchievementStats();
-  
+
+  useEffect(() => {
+    // Fetch timeline data from Firestore
+    const fetchTimelineData = async () => {
+      try {
+        const timelineQuery = query(
+          collection(firestore, 'achievements_Medal_Timeline'),
+          orderBy('date', 'desc')
+        );
+        const querySnapshot = await getDocs(timelineQuery);
+        const timelineItems = querySnapshot.docs.map(doc => ({
+          title: doc.data().blogDisplay,
+          description: `${doc.data().championship} - ${doc.data().place_Achieved}`,
+          count: doc.data().worthNoticing,
+          date: doc.data().date,
+          year: new Date(doc.data().date).getFullYear(),
+          image: doc.data().image,
+          venue: doc.data().venue,
+          coach: doc.data().coach,
+          bestScore: doc.data().best_Score
+        }));
+        setTimelineData(timelineItems);
+      } catch (error) {
+        console.error('Error fetching timeline data:', error);
+      }
+    };
+
+    fetchTimelineData();
+  }, []);
+
   useEffect(() => {
     // Animate sections appearing when data is loaded
     if (achievementsData && achievementsData.length > 0) {
@@ -74,14 +106,7 @@ export default function Achievements() {
         }, index * 300);
       });
     }
-  }, [achievementsData]);  // Timeline data for interactive display
-  const timelineData = achievementsData ? achievementsData.map(section => ({
-    title: section.category,
-    description: `Outstanding accomplishments in ${section.category.toLowerCase()}`,
-    count: section.items.length
-  })) : [];
-
-  // Show loading state
+  }, [achievementsData]);  // Show loading state
   if (loading) {
     return (
       <Layout>
@@ -145,36 +170,6 @@ export default function Achievements() {
             <TypewriterText text="Achievement Timeline" delay={2000} />
           </h2>
           <Timeline items={timelineData} />
-        </div>
-        
-        {/* Quick Stats */}
-        <div className={styles.statsSection}>
-          {/* <div className={styles.statCard}>
-            <span className={styles.statNumber}>
-              <TypewriterText 
-                text={stats.totalCategories.toString()} 
-                delay={3000}
-              />
-            </span>
-            <span className={styles.statLabel}>Categories</span>
-          </div>
-          <div className={styles.statCard}>
-            <span className={styles.statNumber}>
-              <TypewriterText 
-                text={stats.totalAchievements.toString()} 
-                delay={3200}
-              />
-            </span>
-            <span className={styles.statLabel}>Total Achievements</span>
-          </div> */}
-          
-          {/* Show real-time indicator if using live data */}
-          {/* {!loading && (
-            <div className={styles.realtimeIndicator}>
-              <span className={styles.liveDot}></span>
-              Live Data
-            </div>
-          )} */}
         </div>
       </div>
     </Layout>
