@@ -5,6 +5,9 @@ import { useState, useEffect } from 'react';
 export default function Layout({ children }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hideNavLinks, setHideNavLinks] = useState(false);
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -15,18 +18,26 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 50);
+      const currentScrollPos = window.scrollY;
+      // Set isScrolled for background color change
+      setIsScrolled(currentScrollPos > 50);
+      
+      // Determine if we should hide the nav links
+      // Hide when scrolling down and beyond threshold, show when scrolling up
+      setHideNavLinks(currentScrollPos > 100 && currentScrollPos > prevScrollPos);
+      
+      // Update previous scroll position
+      setPrevScrollPos(currentScrollPos);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [prevScrollPos]);
 
   return (
     <>      <nav style={{ 
-        padding: '1rem', 
-        background: isScrolled ? '#f57e42' : (isMenuOpen ? '#f57e42' : 'transparent'), 
+        padding: '0.5rem', // Reduced padding to make the header shorter
+        background: 'transparent', // Always transparent
         color: '#fff', 
         display: 'flex', 
         alignItems: 'center',
@@ -36,17 +47,48 @@ export default function Layout({ children }) {
         left: 0,
         right: 0,
         zIndex: 1000,
-        transition: 'background-color 0.3s ease',
-        height: '80px'
-      }}>
-        {/* Mobile Menu Button - Left side on mobile */}
+        transition: 'all 0.3s ease',
+        height: '60px', // Explicitly set a shorter height
+        backdropFilter: isScrolled ? 'blur(10px)' : 'none', // Add slight blur when scrolled for better readability
+        boxShadow: isScrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none' // Subtle shadow when scrolled
+      }}>{/* Logo - Left on desktop, centered on mobile */}
+        <Link href="/" style={{ 
+          display: 'flex', 
+          alignItems: 'center',
+          position: 'static',
+          left: 'auto',
+          transform: 'none',
+          transition: 'all 0.3s ease'
+        }} className="logo-link" onClick={closeMenu}>
+          <Image 
+            src="/archery_target.png" 
+            alt="SurajBlog Logo" 
+            width={70}
+            height={50}
+            style={{ borderRadius: '4px' }}
+          />
+        </Link>        {/* Desktop Navigation - Right Aligned */}
+        <div style={{ 
+          display: hideNavLinks ? 'none' : 'flex', 
+          alignItems: 'center',
+          marginLeft: 'auto', // Push to the right
+          opacity: hideNavLinks ? 0 : 1,
+          transition: 'opacity 0.3s ease, display 0s ease 0.3s'
+        }} className="desktop-nav">
+          <Link href="/biography" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>Biography</Link>
+          <Link href="/achievements" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>Achievements</Link>
+          <Link href="/media" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>Media</Link>
+          <Link href="/contact" style={{ color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>Contact</Link>
+        </div>
+
+        {/* No spacer needed with our new layout */}        {/* Mobile Menu Button */}
         <button 
           onClick={toggleMenu}
           style={{
-            display: 'none',
+            display: hideNavLinks ? 'none' : 'none', // Still "none" by default for desktop, but will show on mobile via CSS
             background: 'none',
             border: 'none',
-            color: '#fff',
+            color: isScrolled ? '#fff' : '#ff6b35',
             fontSize: '1.5rem',
             cursor: 'pointer',
             padding: '0.5rem',
@@ -55,39 +97,8 @@ export default function Layout({ children }) {
           className="mobile-menu-btn"
         >
           {isMenuOpen ? '✕' : '☰'}
-        </button>
-
-        {/* Logo - Left on desktop, right on mobile */}
-        <Link href="/" style={{ 
-          display: 'flex', 
-          alignItems: 'center'
-        }} className="logo-link" onClick={closeMenu}>
-          <Image 
-            src="/archery_target.png" 
-            alt="SurajBlog Logo" 
-            width={100}
-            height={100}
-            style={{ borderRadius: '4px' }}
-          />
-        </Link>        
-
-        {/* Desktop Navigation - Centered */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          position: 'absolute',
-          left: '50%',
-          transform: 'translateX(-50%)'
-        }} className="desktop-nav">
-          <Link href="/biography" style={{ marginRight: 20, color: isScrolled ? '#fff' : '#ff6b35', textDecoration: 'none', transition: 'color 0.3s ease' }}>Biography</Link>
-          <Link href="/achievements" style={{ marginRight: 20, color: isScrolled ? '#fff' : '#ff6b35', textDecoration: 'none', transition: 'color 0.3s ease' }}>Achievements</Link>
-          <Link href="/media" style={{ marginRight: 20, color: isScrolled ? '#fff' : '#ff6b35', textDecoration: 'none', transition: 'color 0.3s ease' }}>Media</Link>
-          <Link href="/contact" style={{ color: isScrolled ? '#fff' : '#ff6b35', textDecoration: 'none', transition: 'color 0.3s ease' }}>Contact</Link>
-        </div>
-
-        {/* Right spacer for desktop to balance layout */}
-        <div style={{ width: '60px' }} className="right-spacer"></div>{/* Mobile Navigation Menu */}
-        {isMenuOpen && (          <div style={{
+        </button>{/* Mobile Navigation Menu */}
+        {isMenuOpen && !hideNavLinks && (          <div style={{
             position: 'absolute',
             top: '100%',
             left: '0',
@@ -133,20 +144,14 @@ export default function Layout({ children }) {
       </nav>      {/* CSS for responsive behavior */}      <style jsx>{`
         @media (max-width: 768px) {
           nav {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            background: ${isScrolled ? '#f57e42' : (isMenuOpen ? '#f57e42' : 'transparent')} !important;
-            z-index: 1000 !important;
-            height: 80px !important;
-            padding: 1rem !important;
-            display: block !important;
-            justify-content: unset !important;
-            transition: background-color 0.3s ease !important;
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            background: #f57e42 !important;
           }
           main {
-            padding-top: 140px !important;
+            padding-top: 2rem !important;
           }
           .desktop-nav {
             display: none !important;
@@ -157,24 +162,20 @@ export default function Layout({ children }) {
             right: 1rem !important;
             top: 50% !important;
             transform: translateY(-50%) !important;
-            color: #fff !important;
           }
           .right-spacer {
-            display: none !important;
+            display: none;
           }
           .logo-link {
-            position: absolute !important;
-            left: 1rem !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            width: 30px !important;
-            height: 30px !important;
-            margin: 0 !important;
-            display: block !important;
+            position: static !important;
+            left: auto !important;
+            transform: none !important;
+            width: 50px !important;
+            height: 40px !important;
           }
           .logo-link img {
-            width: 30px !important;
-            height: 30px !important;
+            width: 50px !important;
+            height: 40px !important;
           }
         }
         @media (min-width: 769px) {
@@ -184,27 +185,25 @@ export default function Layout({ children }) {
           .mobile-nav {
             display: none !important;
           }
-          .right-spacer {
-            width: 25vw !important;
-          }
+          /* Removed right spacer */
           .logo-link {
             position: static !important;
             left: auto !important;
             transform: none !important;
-            width: 25vw !important;
+            width: auto !important;
             height: auto !important;
-            order: 1;
-          }
+            transition: all 0.3s ease !important;
+       }
           .logo-link img {
-            width: 100% !important;
-            height: auto !important;
-            max-height: 80px !important;
+            width: 70px !important;
+            height: 50px !important;
+            max-height: 50px !important;
             object-fit: contain !important;
           }
         }
       `}</style>
 
-      <main style={{ paddingTop: '140px', padding: '140px 2rem 2rem 2rem' }}>{children}</main>
+      <main style={{ paddingTop: '80px', padding: '80px 2rem 2rem 2rem' }}>{children}</main>
     </>
   );
 }
