@@ -49,12 +49,11 @@ export default function Home() {
         <div style={{
           width: '100%',
           height: '100%',
-          transform: getImageTransform(),
           transformOrigin: 'center top',
           transition: 'transform 0.1s ease-out'
         }}>
           <Image
-            src="/HomeMainImage.png"
+            src="/karthik_header_image_2.jpeg"
             alt="Suraj Nalam Background"
             fill
             style={{
@@ -84,26 +83,29 @@ export default function Home() {
         zIndex: 2,
         minHeight: '100vh',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'end',
+        alignItems: 'start',
         textAlign: 'center',
         padding: '2rem',
-        color: 'white'
-      }}>
+        color: 'white',
+        width: '85vw',
+       }}>
         <div style={{
-          background: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
-          borderRadius: '20px',
+          background: 'transparent',
           padding: '3rem 2rem',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 25px 50px rgba(0, 0, 0, 0.3)',
+          border: 'none',
           maxWidth: '600px',
           width: '100%',
+          display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'start',
+        alignItems: 'center',
+        textAlign: 'center',
           transform: `translateY(${Math.min(scrollY * 0.3, 100)}px)`,
           opacity: Math.max(1 - (scrollY / 800), 0),
           transition: 'transform 0.1s ease-out, opacity 0.1s ease-out'
-        }}>
+         }}>
           <h1 style={{
             fontSize: 'clamp(2.5rem, 5vw, 4rem)',
             fontWeight: '800',
@@ -123,7 +125,7 @@ export default function Home() {
             color: 'rgba(255, 255, 255, 0.9)',
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'
           }}>
-            Welcome to the official site of the latest man alive.
+            Welcome to the official site of the Latest man alive.
           </p>
           
           {/* Call to Action Buttons */}
@@ -188,10 +190,10 @@ export default function Home() {
       <div style={{
         position: 'relative',
         zIndex: 2,
-        minHeight: '100vh',
+        minHeight: '50vh',
         background: 'rgba(0, 0, 0, 0.7)',
         backdropFilter: 'blur(15px)',
-        padding: '4rem 2rem',
+        borderRadius: '20px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
