@@ -66,6 +66,15 @@ const slideAnimationStyles = `
     }
   }
   
+  @keyframes float {
+    0% {
+      background-position: 0px 0px;
+    }
+    100% {
+      background-position: 15px 15px;
+    }
+  }
+  
   .animated {
     animation-duration: 1.2s;
     animation-fill-mode: both;
@@ -108,6 +117,10 @@ const slideAnimationStyles = `
   .delay-800 {
     animation-delay: 800ms;
   }
+  
+  .image-spotlight:hover {
+    transform: translateY(-8px) !important;
+  }
 
   /* Full screen slide styles */
   .slide-section {
@@ -139,27 +152,157 @@ const slideAnimationStyles = `
     overflow: hidden;
   }
   
-  .parallax-decoration {
+  /* Fixed parallax tile background */
+  .parallax-tile-bg {
     position: absolute;
-    border-radius: 50%;
-    opacity: 0.1;
-    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: 500px 500px;
+    z-index: 0;
+    opacity: 0.05;
+    pointer-events: none;
+    transition: transform 0.05s ease-out;
+    will-change: transform, background-position;
+    background-position: 0 0;
   }
   
-  .dark-section .parallax-decoration {
-    background: linear-gradient(135deg, #f57e42, #ff9933);
+  .dark-section .parallax-tile-bg {
+    background-image: linear-gradient(45deg, #f57e42 25%, transparent 25%), 
+                      linear-gradient(-45deg, #f57e42 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, #f57e42 75%),
+                      linear-gradient(-45deg, transparent 75%, #f57e42 75%);
   }
   
-  .light-section .parallax-decoration {
-    background: linear-gradient(135deg, #333, #111);
+  .light-section .parallax-tile-bg {
+    background-image: linear-gradient(45deg, #333 25%, transparent 25%), 
+                      linear-gradient(-45deg, #333 25%, transparent 25%),
+                      linear-gradient(45deg, transparent 75%, #333 75%),
+                      linear-gradient(-45deg, transparent 75%, #333 75%);
   }
-
+  
   .slide-section-content {
     max-width: 1200px;
     width: 100%;
     padding: 2rem;
+    z-index: 2;
     position: relative;
-    z-index: 5;
+    margin: 0 auto;
+  }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .slide-section {
+      padding: 6rem 0 3rem; /* Add top padding for header space */
+      min-height: calc(100vh - 60px); /* Account for fixed header */
+      scroll-snap-align: none; /* Disable scroll-snap on mobile for smoother scrolling */
+    }
+    
+    .slide-section-content {
+      padding: 1.5rem;
+      width: calc(100% - 2rem);
+    }
+    
+    /* Add smooth scroll buffer for mobile */
+    html, body {
+      scroll-behavior: smooth;
+      scroll-padding-top: 60px; /* Account for fixed header height */
+    }
+    
+    /* Improved buttons */
+    .slide-button {
+      width: 85%;
+      padding: 0.9rem 1.5rem;
+      font-size: 1.05rem;
+      margin: 0.5rem auto;
+    }
+    
+    .slide-button-outline {
+      width: 85%;
+      padding: 0.9rem 1.5rem;
+      font-size: 1.05rem;
+      margin: 0.5rem auto;
+    }
+    
+    /* Mobile text optimizations */
+    h1 {
+      font-size: clamp(2rem, 8vw, 3rem) !important;
+      margin-bottom: 1rem !important;
+    }
+    
+    h2 {
+      font-size: clamp(1.5rem, 6vw, 2.5rem) !important;
+      margin-bottom: 1rem !important;
+    }
+    
+    h3 {
+      font-size: clamp(1.3rem, 5vw, 2rem) !important;
+      margin-bottom: 1rem !important;
+    }
+    
+    p {
+      font-size: 1rem !important;
+      line-height: 1.6 !important;
+      margin-bottom: 1.5rem !important;
+    }
+    
+    .slide-section {
+      gap: 1.5rem !important;
+    }
+    
+    .slide-section-content > div {
+      gap: 2rem !important;
+    }
+    
+    /* Mobile image container optimizations - Enhanced */
+    .mobile-image-container {
+      display: block !important;
+      position: relative !important;
+      width: 100% !important;
+      height: 400px !important;
+      min-height: 400px !important;
+      max-height: 400px !important;
+      flex: 1 0 100% !important;
+      order: 2 !important;
+      margin: 1rem 0 !important;
+      background-color: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      overflow: visible !important;
+    }
+    
+    .mobile-image-container > span {
+      width: 100% !important;
+      height: 100% !important;
+      position: relative !important;
+    }
+    
+    .mobile-image-container img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      object-position: center !important;
+      position: relative !important;
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    
+    .image-spotlight {
+      min-height: 400px !important;
+      height: 400px !important;
+      width: 100% !important;
+      flex: 1 0 100% !important;
+    }
+    
+    div[style*="minHeight: '400px'"] {
+      min-height: 300px !important;
+    }
+    
+    div[style*="order: isMobile"] {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+    }
   }
 
   .dark-section {
@@ -234,6 +377,23 @@ const slideAnimationStyles = `
     text-align: center;
   }
   
+  /* Mobile optimizations for buttons */
+  @media (max-width: 768px) {
+    .slide-button {
+      width: 85%;
+      padding: 0.9rem 1.5rem;
+      font-size: 1.05rem;
+      margin: 0.5rem auto;
+    }
+    
+    .slide-button-outline {
+      width: 85%;
+      padding: 0.9rem 1.5rem;
+      font-size: 1.05rem;
+      margin: 0.5rem auto;
+    }
+  }
+  
   .slide-button:hover {
     transform: translateY(-3px) scale(1.03);
     box-shadow: 0 8px 25px rgba(245, 126, 66, 0.4);
@@ -265,6 +425,22 @@ const slideAnimationStyles = `
     transition: transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
     will-change: transform;
   }
+  
+  /* First Slide - Light (How It All Began) - Ensure no overflow */
+  .light-section {
+    overflow: hidden !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .light-section .slide-section-content {
+    overflow: hidden !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100vh;
+  }
 `;
 
 export default function Home() {
@@ -280,6 +456,7 @@ export default function Home() {
   const section2Ref = useRef(null);
   const section3Ref = useRef(null);
   const section4Ref = useRef(null);
+  const section5Ref = useRef(null);
   
   // Refs for parallax elements
   const parallaxRefs = {
@@ -304,7 +481,8 @@ export default function Home() {
     section1: false,
     section2: false,
     section3: false,
-    section4: false
+    section4: false,
+    section5: false
   });
   
   // Logic for slide navigation
@@ -330,8 +508,35 @@ export default function Home() {
     );
   };
   
-  // Calculate parallax effect for elements based on scroll position
+  // Enhanced parallax effect calculation based on scroll position with variable depths
   const updateParallaxElements = () => {
+    // Update parallax tile backgrounds
+    document.querySelectorAll('.parallax-tile-bg').forEach((el) => {
+      const parentRect = el.parentElement.getBoundingClientRect();
+      const scrollProgress = -parentRect.top / 10; // Subtle effect
+      el.style.backgroundPosition = `${scrollProgress}px ${scrollProgress}px`;
+    });
+    
+    // Update parallax decorative elements with variable depths
+    document.querySelectorAll('.parallax-decoration').forEach((el) => {
+      const depth = el.dataset.parallaxDepth ? parseFloat(el.dataset.parallaxDepth) / 100 : 0.1;
+      const parentRect = el.parentElement.getBoundingClientRect();
+      
+      if (parentRect.top < window.innerHeight && parentRect.bottom > 0) {
+        // Calculate parallax offset based on element's position in viewport
+        const scrollProgress = -parentRect.top * depth;
+        const originalTransform = el.dataset.originalTransform || 'none';
+        
+        // Apply transform while preserving original rotation/scale
+        if (originalTransform !== 'none' && !originalTransform.includes('translate3d')) {
+          el.style.transform = `translate3d(0, ${scrollProgress}px, 0) ${originalTransform}`;
+        } else {
+          el.style.transform = `translate3d(0, ${scrollProgress}px, 0)`;
+        }
+      }
+    });
+    
+    // Update other parallax elements
     Object.entries(parallaxRefs).forEach(([key, ref]) => {
       if (ref.current) {
         const rect = ref.current.getBoundingClientRect();
@@ -344,13 +549,14 @@ export default function Home() {
           const intensity = key.includes('hero') ? 0.1 : 0.05;
           const factor = key.includes('Left') || key.includes('Right') ? 0.5 : 0.3;
           
-          ref.current.style.transform = `translate3d(${-distanceFromCenterX * intensity}px, ${-distanceFromCenterY * intensity}px, 0) scale(1)`;
+          // Keep content elements static by commenting out this transformation
+          // ref.current.style.transform = `translate3d(${-distanceFromCenterX * intensity}px, ${-distanceFromCenterY * intensity}px, 0) scale(1)`;
         }
       }
     });
   };
   
-  // Apply parallax effect based on mouse movement for more interactivity
+  // Enhanced parallax effect based on mouse movement with variable depths
   const handleMouseMove = (e) => {
     if (isMobile) return; // Skip parallax on mobile
     
@@ -360,7 +566,34 @@ export default function Home() {
     
     setMousePosition({ x: moveX, y: moveY });
     
-    // Apply parallax effect to background elements
+    // Apply parallax effect to background tile elements
+    document.querySelectorAll('.parallax-tile-bg').forEach((el) => {
+      const intensity = 0.5;
+      const rect = el.parentElement.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.style.transform = `translate3d(${moveX * intensity}px, ${moveY * intensity}px, 0)`;
+      }
+    });
+    
+    // Apply parallax effect to decorative elements with variable depth
+    document.querySelectorAll('.parallax-decoration').forEach((el) => {
+      const depth = el.dataset.parallaxDepth ? parseFloat(el.dataset.parallaxDepth) / 100 : 0.1;
+      const rect = el.parentElement.getBoundingClientRect();
+      
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        // Calculate movement based on depth parameter
+        const xOffset = moveX * depth;
+        const yOffset = moveY * depth;
+        
+        // Apply the transform
+        el.style.transform = el.style.transform.includes('rotate') || el.style.transform.includes('scale')
+          ? `translate3d(${xOffset}px, ${yOffset}px, 0) ${el.style.transform}` // Preserve existing transforms
+          : `translate3d(${xOffset}px, ${yOffset}px, 0)`;
+      }
+    });
+    
+    // Keep content static - skip applying transform to content elements
+    /*
     Object.entries(parallaxRefs).forEach(([key, ref]) => {
       if (ref.current && isElementInViewport(ref.current, -200)) {
         const intensity = key.includes('1') ? 0.7 : 0.4;
@@ -370,6 +603,7 @@ export default function Home() {
         ref.current.style.transform = `translate3d(${moveX * intensity * xFactor}px, ${moveY * intensity * yFactor}px, 0)`;
       }
     });
+    */
   };
   
   // Check which section is most visible in the viewport
@@ -380,7 +614,8 @@ export default function Home() {
       { ref: section1Ref, index: 2 },
       { ref: section2Ref, index: 3 },
       { ref: section3Ref, index: 4 },
-      { ref: section4Ref, index: 5 }
+      { ref: section4Ref, index: 5 },
+      { ref: section5Ref, index: 6 }
     ];
     
     let mostVisibleSection = { index: 0, visibleArea: 0 };
@@ -443,6 +678,12 @@ export default function Home() {
       }
     }
     
+    if (section5Ref.current && !animatedSections.section5) {
+      if (isElementInViewport(section5Ref.current, 250)) {
+        updates.section5 = true;
+      }
+    }
+    
     // If any updates needed, update state
     if (Object.keys(updates).length > 0) {
       setAnimatedSections(prev => ({
@@ -484,11 +725,29 @@ export default function Home() {
       }
     };
 
-    // Initial check for animations (for elements already in view on load)
+    // Enhanced initial check for animations and parallax setup
     setTimeout(() => {
       checkAnimations();
       updateActiveSection();
       updateParallaxElements();
+      
+      // Initialize parallax tile backgrounds
+      document.querySelectorAll('.parallax-tile-bg').forEach(el => {
+        // Set initial position
+        el.style.backgroundPosition = '0px 0px';
+      });
+      
+      // Initialize parallax decoration elements
+      document.querySelectorAll('.parallax-decoration').forEach(el => {
+        // Store original transform for reference
+        const originalTransform = el.style.transform;
+        el.dataset.originalTransform = originalTransform || 'none';
+        
+        // Store parallax depth if not specified
+        if (!el.dataset.parallaxDepth) {
+          el.dataset.parallaxDepth = '10'; // Default depth
+        }
+      });
     }, 100);
     
     window.addEventListener('scroll', handleScroll);
@@ -521,21 +780,26 @@ export default function Home() {
           <div 
             className={`slide-nav-dot ${activeSection === 2 ? 'active' : ''}`} 
             onClick={() => scrollToSection(section1Ref)}
-            title="How It All Began"
+            title="GIF Showcase"
           />
           <div 
             className={`slide-nav-dot ${activeSection === 3 ? 'active' : ''}`} 
             onClick={() => scrollToSection(section2Ref)}
-            title="Journey to Excellence"
+            title="How It All Began"
           />
           <div 
             className={`slide-nav-dot ${activeSection === 4 ? 'active' : ''}`} 
             onClick={() => scrollToSection(section3Ref)}
-            title="Beyond the Bow"
+            title="Journey to Excellence"
           />
           <div 
             className={`slide-nav-dot ${activeSection === 5 ? 'active' : ''}`} 
             onClick={() => scrollToSection(section4Ref)}
+            title="Beyond the Bow"
+          />
+          <div 
+            className={`slide-nav-dot ${activeSection === 6 ? 'active' : ''}`} 
+            onClick={() => scrollToSection(section5Ref)}
             title="Explore"
           />
         </div>
@@ -582,6 +846,41 @@ export default function Home() {
         }} />
       </div>
 
+      {/* Fixed GIF Background - positioned between "Discover My Journey" and "How It All Began" */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        zIndex: -1,
+        overflow: 'hidden',
+        opacity: activeSection >= 1 && activeSection <= 3 ? 1 : 0, // Visible from "Discover My Journey" through "How It All Began"
+        transition: 'opacity 0.8s ease'
+      }}>
+        <Image
+          src="/Karthikgif.gif"
+          alt="Archery in Action - Fixed Background"
+          fill
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center'
+          }}
+          unoptimized={true}
+          priority={false}
+        />
+        {/* Overlay for text readability */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'rgba(0, 0, 0, 0.4)',
+          zIndex: 1
+        }} />
+      </div>
+
       {/* Hero Slide */}
       <div 
         className="slide-section"
@@ -612,7 +911,7 @@ export default function Home() {
             style={{
               fontSize: 'clamp(2.5rem, 5vw, 4rem)',
               fontWeight: '800',
-              marginBottom: '1rem',
+              marginBottom: '0.5 rem',
               background: 'linear-gradient(135deg, #f57e42, #ff9933)',
               WebkitBackgroundClip: 'text',
               color: 'orange',
@@ -622,57 +921,15 @@ export default function Home() {
           >
             Suraj Nalam
           </h1>
-          
-          {/* Call to Action Buttons */}
-          <div 
-            className={`${animatedSections.heroContent ? 'animated slide-up delay-400' : ''}`}
-            style={{
-              marginTop: '2rem',
-              display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
-              gap: isMobile ? '0.75rem' : '1rem',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%'
-            }}
-          >
-            <a href="/biography" className="slide-button">
-              Learn More
-            </a>
-            <a 
-              href="/achievements"
-              style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                color: 'white',
-                padding: isMobile ? '0.75rem 1.5rem' : '0.75rem 2rem',
-                borderRadius: '25px',
-                textDecoration: 'none',
-                fontWeight: '600',
-                fontSize: '1rem',
-                transition: 'all 0.3s ease',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                cursor: 'pointer',
-                backdropFilter: 'blur(10px)',
-                width: isMobile ? '80%' : 'auto',
-                display: 'inline-block'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.3)';
-                e.target.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-                e.target.style.transform = 'translateY(0)';
-              }}
-            >
-              View Achievements
-            </a>
-          </div>
         </div>
       </div>
 
       {/* Title Slide - Dark */}
       <div className="slide-section dark-section" ref={discoverMoreRef}>
+        {/* Parallax tile background */}
+        <div className="parallax-bg">
+          <div className="parallax-tile-bg"></div>
+        </div>
         <div 
           className={`slide-section-content ${animatedSections.discoverMore ? 'animated fade-in' : ''}`}
           style={{
@@ -705,79 +962,185 @@ export default function Home() {
         </div>
       </div>
 
-      {/* First Slide - Light (How It All Began) */}
-      <div className="slide-section light-section">
-        <div className="slide-section-content" ref={section1Ref}>
+      {/* GIF Slide - Transparent slide to show fixed GIF background */}
+      <div className="slide-section" ref={section1Ref} style={{ 
+        backgroundColor: 'transparent', 
+        minHeight: '100vh' 
+      }}>
+        {/* Empty slide - GIF shows as fixed background */}
+      </div>
+
+      {}
+      <div className="slide-section light-section" style={{ 
+        backgroundColor: "#c9a380",
+        backgroundImage: "url('/subtle-pattern.png')",
+        backgroundBlendMode: "soft-light",
+        overflow: "hidden"
+      }}>
+        
+        <div className="slide-section-content" ref={section2Ref}>
+          {/* Enhanced container with better spacing and hierarchy */}
           <div style={{
             display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
-            alignItems: 'center',
-            gap: '3rem'
+            alignItems: isMobile ? 'flex-start' : 'center',
+            gap: isMobile ? '2rem' : '2rem',
+            position: 'relative',
+            zIndex: 5,
+            maxWidth: isMobile ? '100%' : '1100px',
+            margin: '0 auto',
+            padding: isMobile ? '0' : '0.5rem',
+            height: isMobile ? 'auto' : 'calc(100vh - 2rem)',
+            maxHeight: isMobile ? 'none' : 'calc(100vh - 2rem)',
+            overflow: 'hidden',
+            justifyContent: 'center'
           }}>
+            {/* Image container - optimized for web view */}
             <div 
-              className={`${animatedSections.section1 ? 'animated slide-right delay-200' : ''}`}
+              className="mobile-image-container"
               style={{
-                flex: '1',
+                flex: isMobile ? '0 0 100%' : '0 0 50%',
                 position: 'relative',
-                minHeight: '400px',
-                order: isMobile ? 2 : 1
+                height: isMobile ? '400px' : 'min(60vh, 550px)',
+                minHeight: isMobile ? '400px' : '450px',
+                maxHeight: isMobile ? '400px' : '550px',
+                order: isMobile ? 2 : 1,
+                marginBottom: isMobile ? '1.5rem' : '0',
+                overflow: 'hidden',
+                width: '100%',
+                backgroundColor: isMobile ? 'rgba(255,255,255,0.05)' : 'transparent',
+                border: isMobile ? '1px solid rgba(255,255,255,0.1)' : 'none'
               }}
             >
               <Image
-                src="/karthik_header_image_2.jpeg" 
-                alt="How it began"
+                src="/KarthikHomeNBG.png" 
+                alt="How it began - Suraj Nalam (Karthik) Archery Journey"
                 fill
+                priority={true}
+                sizes="(max-width: 768px) 100vw, 50vw"
                 style={{
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                   objectPosition: 'center',
-                  borderRadius: '8px',
-                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)'
+                  filter: 'contrast(1.05) saturate(1.05)',
                 }}
               />
             </div>
             
+            {/* Text container - optimized for web view */}
             <div 
-              className={`${animatedSections.section1 ? 'animated slide-left delay-400' : ''}`} 
               style={{ 
-                flex: '1',
-                order: isMobile ? 1 : 2
+                flex: isMobile ? '0 0 100%' : '0 0 45%',
+                order: isMobile ? 1 : 2,
+                color: "#fff",
+                padding: isMobile ? '0.5rem 0.5rem 0' : '0.5rem',
+                position: 'relative',
+                maxWidth: isMobile ? '100%' : '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                height: isMobile ? 'auto' : '100%',
+                overflow: 'hidden'
               }}
             >
+              {/* Decorative accent element */}
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '-15px',
+                  left: isMobile ? '0' : '-15px',
+                  width: '40px',
+                  height: '3px',
+                  background: 'rgba(245, 126, 66, 0.8)',
+                  borderRadius: '3px'
+                }}
+              ></div>
+              
               <h3 style={{
-                fontSize: 'clamp(1.8rem, 3vw, 2.5rem)',
+                fontSize: 'clamp(1.6rem, 3vw, 2.4rem)',
                 fontWeight: '700',
-                marginBottom: '1.5rem',
+                marginBottom: '0.8rem',
+                position: 'relative',
+                lineHeight: '1.1',
+                letterSpacing: '-0.01em'
               }}>
-                <span className="accent-text">How It All Began</span>
+                <span style={{ 
+                  textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                  position: 'relative',
+                  display: 'inline-block',
+                  background: 'linear-gradient(90deg, #fff, rgba(255,255,255,0.9))',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}>
+                  How It All Began
+                  <span style={{ 
+                    position: 'absolute',
+                    height: '4px',
+                    width: '80%',
+                    background: 'linear-gradient(90deg, rgba(245, 126, 66, 0.9), rgba(255, 153, 51, 0))',
+                    bottom: '-10px',
+                    left: '0',
+                    borderRadius: '2px'
+                  }}></span>
+                </span>
               </h3>
+              
               <p style={{
-                lineHeight: '1.8',
-                fontSize: '1.1rem',
-                marginBottom: '1.5rem',
+                lineHeight: '1.5',
+                fontSize: isMobile ? '1.1rem' : '1rem',
+                marginBottom: '0.8rem',
+                color: '#fff',
+                textShadow: '0 1px 3px rgba(0,0,0,0.15)',
+                fontWeight: '400',
+                maxWidth: '100%'
               }}>
                 My name is Suraj Nalam (Karthik), and archery has been more than just a sport for me — it's been a journey of discipline, self-discovery, and unshakable love for the game.
               </p>
+              
               <p style={{
-                lineHeight: '1.8',
-                fontSize: '1.1rem',
-                marginBottom: '1.5rem',
+                lineHeight: '1.5',
+                fontSize: isMobile ? '1.1rem' : '1rem',
+                marginBottom: '0.8rem',
+                color: '#fff',
+                textShadow: '0 1px 3px rgba(0,0,0,0.15)',
+                fontWeight: '400',
+                maxWidth: '100%'
               }}>
                 I picked up my first bow at the age of 4, and from that moment, something clicked. The feeling of focus, the precision required, and the satisfaction of hitting the target created an instant connection.
               </p>
+              
               <p style={{
-                lineHeight: '1.8',
-                fontSize: '1.1rem',
+                lineHeight: '1.5',
+                fontSize: isMobile ? '1.1rem' : '1rem',
+                color: '#fff',
+                textShadow: '0 1px 3px rgba(0,0,0,0.15)',
+                fontWeight: '400',
+                maxWidth: '100%'
               }}>
                 What started as a weekend activity quickly grew into a passion I knew I wanted to pursue seriously. The journey since then has been extraordinary.
               </p>
+              
+              {/* Subtle decorative element at the bottom */}
+              <div style={{
+                width: '60px',
+                height: '3px',
+                background: 'rgba(255,255,255,0.2)',
+                marginTop: '2rem',
+                borderRadius: '3px',
+                display: isMobile ? 'none' : 'block'
+              }}></div>
             </div>
           </div>
         </div>
       </div>
       
-      {/* Second Slide - Dark (Journey to Excellence) */}
+      {/* Second Slide - Dark (Journey to Excellence) - COMMENTED OUT */}
+      {/* 
       <div className="slide-section dark-section">
-        <div className="slide-section-content" ref={section2Ref}>
+        <div className="parallax-bg">
+          <div className="parallax-tile-bg"></div>
+        </div>
+        <div className="slide-section-content" ref={section3Ref}>
           <div style={{
             display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
@@ -785,7 +1148,7 @@ export default function Home() {
             gap: '3rem'
           }}>
             <div 
-              className={`${animatedSections.section2 ? 'animated slide-left delay-200' : ''}`}
+              className={`${animatedSections.section3 ? 'animated slide-left delay-200' : ''}`}
               style={{
                 flex: '1',
                 order: isMobile ? 1 : 2
@@ -824,7 +1187,7 @@ export default function Home() {
             </div>
             
             <div 
-              className={`${animatedSections.section2 ? 'animated slide-right delay-400' : ''}`}
+              className={`${animatedSections.section3 ? 'animated slide-right delay-400' : ''}`}
               style={{
                 flex: '1',
                 position: 'relative',
@@ -847,12 +1210,17 @@ export default function Home() {
           </div>
         </div>
       </div>
+      */}
       
       {/* Third Slide - Light (Beyond the Bow) */}
       <div className="slide-section light-section">
-        <div className="slide-section-content" ref={section3Ref}>
+        {/* Parallax tile background */}
+        <div className="parallax-bg">
+          <div className="parallax-tile-bg"></div>
+        </div>
+        <div className="slide-section-content" ref={section4Ref}>
           <div 
-            className={`${animatedSections.section3 ? 'animated fade-in' : ''}`}
+            className={`${animatedSections.section4 ? 'animated fade-in' : ''}`}
             style={{
               textAlign: 'center',
               maxWidth: '900px',
@@ -868,7 +1236,7 @@ export default function Home() {
             </h3>
             
             <div 
-              className={`${animatedSections.section3 ? 'animated slide-up delay-200' : ''}`}
+              className={`${animatedSections.section4 ? 'animated slide-up delay-200' : ''}`}
               style={{
                 position: 'relative',
                 width: '100%',
@@ -889,7 +1257,7 @@ export default function Home() {
               />
             </div>
             
-            <div className={`${animatedSections.section3 ? 'animated scale-up delay-400' : ''}`}>
+            <div className={`${animatedSections.section4 ? 'animated scale-up delay-400' : ''}`}>
               <p style={{
                 lineHeight: '1.8',
                 fontSize: '1.1rem',
@@ -920,17 +1288,14 @@ export default function Home() {
       
       {/* Fourth Slide - Dark (Call to Action) */}
       <div className="slide-section dark-section">
-        <div className="slide-section-content" ref={section4Ref}>
-          <div 
-            className={`${animatedSections.section4 ? 'animated fade-in' : ''}`}
-            style={{
-              textAlign: 'center',
-              maxWidth: '800px',
-              margin: '0 auto'
-            }}
-          >
+        {/* Parallax tile background */}
+        <div className="parallax-bg">
+          <div className="parallax-tile-bg"></div>
+        </div>
+        <div className="slide-section-content" ref={section5Ref}>
+          <div className={`${animatedSections.section5 ? 'animated fade-in' : ''}`}>
             <h3 
-              className={`${animatedSections.section4 ? 'animated slide-up' : ''}`}
+              className={`${animatedSections.section5 ? 'animated slide-up' : ''}`}
               style={{
                 fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
                 fontWeight: '700',
@@ -941,7 +1306,7 @@ export default function Home() {
               <span className="accent-text">Explore My Journey</span>
             </h3>
             <p 
-              className={`${animatedSections.section4 ? 'animated slide-up delay-200' : ''}`}
+              className={`${animatedSections.section5 ? 'animated slide-up delay-200' : ''}`}
               style={{
                 color: '#fff',
                 lineHeight: '1.8',
@@ -953,7 +1318,7 @@ export default function Home() {
               Discover more about my achievements, experiences, and the path that's shaped me as an archer.
             </p>
             <div 
-              className={`${animatedSections.section4 ? 'animated slide-up delay-400' : ''}`}
+              className={`${animatedSections.section5 ? 'animated slide-up delay-400' : ''}`}
               style={{
                 display: 'flex',
                 flexDirection: isMobile ? 'column' : 'row',
@@ -1000,6 +1365,36 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Scroll Indicator - Only visible on mobile */}
+      {isMobile && (
+        <div style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1000,
+          textAlign: 'center',
+          animation: 'fadeIn 1.5s infinite alternate',
+          opacity: activeSection === 0 ? 0.8 : 0, // Only show on first slide
+          transition: 'opacity 0.5s ease',
+          pointerEvents: 'none'
+        }}>
+          <div style={{
+            color: '#fff',
+            fontSize: '0.9rem',
+            marginBottom: '8px',
+            textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)',
+            fontWeight: 'bold',
+            letterSpacing: '0.5px'
+          }}>Scroll to explore</div>
+          <div style={{
+            fontSize: '1.5rem',
+            color: '#fff',
+            textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)'
+          }}>↓</div>
+        </div>
+      )}
     </Layout>
   );
 }

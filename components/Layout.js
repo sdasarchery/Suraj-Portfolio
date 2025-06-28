@@ -49,8 +49,9 @@ export default function Layout({ children }) {
         zIndex: 1000,
         transition: 'all 0.3s ease',
         height: '60px', // Explicitly set a shorter height
-        backdropFilter: isScrolled ? 'blur(10px)' : 'none', // Add slight blur when scrolled for better readability
-        boxShadow: isScrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none' // Subtle shadow when scrolled
+        backdropFilter: 'none', // No blur effect, fully transparent
+        boxShadow: 'none', // No shadow for complete transparency
+        backgroundColor: 'transparent' // Ensure background is completely transparent
       }}>{/* Logo - Left on desktop, centered on mobile */}
         <Link href="/" style={{ 
           display: 'flex', 
@@ -61,11 +62,12 @@ export default function Layout({ children }) {
           transition: 'all 0.3s ease'
         }} className="logo-link" onClick={closeMenu}>
           <Image 
-            src="/archery_target.png" 
+            //src="/archery_target.png"
+            src="/SurajLogo1.png"
+
             alt="SurajBlog Logo" 
-            width={70}
+            width={250}
             height={50}
-            style={{ borderRadius: '4px' }}
           />
         </Link>        {/* Desktop Navigation - Right Aligned */}
         <div style={{ 
@@ -75,10 +77,10 @@ export default function Layout({ children }) {
           opacity: hideNavLinks ? 0 : 1,
           transition: 'opacity 0.3s ease, display 0s ease 0.3s'
         }} className="desktop-nav">
-          <Link href="/biography" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>Biography</Link>
-          <Link href="/achievements" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>Achievements</Link>
-          <Link href="/media" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>Media</Link>
-          <Link href="/contact" style={{ color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)' }}>Contact</Link>
+          <Link href="/biography" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)' }}>Biography</Link>
+          <Link href="/achievements" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)' }}>Achievements</Link>
+          <Link href="/media" style={{ marginRight: 20, color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)' }}>Media</Link>
+          <Link href="/contact" style={{ color: '#ff6b35', fontWeight: 'bold', textDecoration: 'none', transition: 'color 0.3s ease', textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)' }}>Contact</Link>
         </div>
 
         {/* No spacer needed with our new layout */}        {/* Mobile Menu Button */}
@@ -86,55 +88,90 @@ export default function Layout({ children }) {
           onClick={toggleMenu}
           style={{
             display: hideNavLinks ? 'none' : 'none', // Still "none" by default for desktop, but will show on mobile via CSS
-            background: 'none',
+            background: 'rgba(0, 0, 0, 0.3)',
             border: 'none',
-            color: isScrolled ? '#fff' : '#ff6b35',
-            fontSize: '1.5rem',
+            borderRadius: '5px',
+            color: '#ff6b35',
+            fontSize: '1.8rem',
             cursor: 'pointer',
-            padding: '0.5rem',
-            transition: 'color 0.3s ease'
+            padding: '0.5rem 0.7rem',
+            transition: 'all 0.3s ease',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
           }}
           className="mobile-menu-btn"
         >
           {isMenuOpen ? '✕' : '☰'}
-        </button>{/* Mobile Navigation Menu */}
+        </button>        {/* Mobile Navigation Menu */}
         {isMenuOpen && !hideNavLinks && (          <div style={{
-            position: 'absolute',
-            top: '100%',
+            position: 'fixed', // Changed from absolute to fixed
+            top: '60px', // Match the header height
             left: '0',
             right: '0',
-            background: isScrolled ? '#ffb366' : 'rgba(255, 179, 102, 0.95)',
+            background: 'rgba(0, 0, 0, 0.8)', // Slightly darker for better contrast
             display: 'flex',
             flexDirection: 'column',
-            padding: '1rem',
-            borderTop: '1px solid #ff9933',
+            padding: '1.5rem', // Increased padding for better tap targets
+            borderTop: '1px solid rgba(255, 153, 51, 0.5)',
             zIndex: 1000,
-            backdropFilter: 'blur(10px)'
+            backdropFilter: 'blur(10px)', // Increased blur
+            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)' // Added shadow for depth
           }} className="mobile-nav">
             <Link 
               href="/biography" 
-              style={{ color: '#fff', textDecoration: 'none', padding: '0.75rem 0', borderBottom: '1px solid #333' }}
+              style={{ 
+                color: '#ff6b35', 
+                textDecoration: 'none', 
+                padding: '1rem 0', // Increased padding for better tap target
+                borderBottom: '1px solid rgba(255, 107, 53, 0.3)',
+                fontSize: '1.2rem', // Larger text
+                fontWeight: 'bold',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)' // Better visibility
+              }}
               onClick={closeMenu}
             >
               Biography
             </Link>
             <Link 
               href="/achievements" 
-              style={{ color: '#fff', textDecoration: 'none', padding: '0.75rem 0', borderBottom: '1px solid #333' }}
+              style={{ 
+                color: '#ff6b35', 
+                textDecoration: 'none', 
+                padding: '1rem 0', 
+                borderBottom: '1px solid rgba(255, 107, 53, 0.3)',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+              }}
               onClick={closeMenu}
             >
               Achievements
             </Link>
             <Link 
               href="/media" 
-              style={{ color: '#fff', textDecoration: 'none', padding: '0.75rem 0', borderBottom: '1px solid #333' }}
+              style={{ 
+                color: '#ff6b35', 
+                textDecoration: 'none', 
+                padding: '1rem 0', 
+                borderBottom: '1px solid rgba(255, 107, 53, 0.3)',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+              }}
               onClick={closeMenu}
             >
               Media
             </Link>
             <Link 
               href="/contact" 
-              style={{ color: '#fff', textDecoration: 'none', padding: '0.75rem 0' }}
+              style={{ 
+                color: '#ff6b35', 
+                textDecoration: 'none', 
+                padding: '1rem 0',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
+              }}
               onClick={closeMenu}
             >
               Contact
@@ -144,14 +181,15 @@ export default function Layout({ children }) {
       </nav>      {/* CSS for responsive behavior */}      <style jsx>{`
         @media (max-width: 768px) {
           nav {
-            position: relative !important;
-            top: auto !important;
-            left: auto !important;
-            right: auto !important;
-            background: #f57e42 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            background: transparent !important;
+            height: 60px !important;
           }
           main {
-            padding-top: 2rem !important;
+            padding-top: 70px !important; /* Increased top padding to account for fixed header */
           }
           .desktop-nav {
             display: none !important;
@@ -162,6 +200,7 @@ export default function Layout({ children }) {
             right: 1rem !important;
             top: 50% !important;
             transform: translateY(-50%) !important;
+            z-index: 1005 !important;
           }
           .right-spacer {
             display: none;
@@ -203,7 +242,7 @@ export default function Layout({ children }) {
         }
       `}</style>
 
-      <main style={{ paddingTop: '80px', padding: '80px 2rem 2rem 2rem' }}>{children}</main>
+      <main style={{ padding: '0 2rem 2rem 2rem' }}>{children}</main>
     </>
   );
 }
