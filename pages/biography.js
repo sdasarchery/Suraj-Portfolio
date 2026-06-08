@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
-import { storage } from '../lib/firebase';
-import { ref, listAll, getDownloadURL } from 'firebase/storage';
 import styles from './biography.module.scss';
 
 export default function Biography() {
   const [images, setImages] = useState([]);
   
   useEffect(() => {
-    // Fetch images from Firebase Storage
+    // Fetch images from Firebase Storage - Firebase is only loaded when this page is visited
     const fetchImagesFromFirebase = async () => {
       try {
+        // Dynamically import Firebase only when needed (on client-side, when user visits this page)
+        const { storage } = await import('../lib/firebase');
+        const { ref, listAll, getDownloadURL } = await import('firebase/storage');
+        
         const imagesRef = ref(storage, 'biography'); // 'biography' is the folder name in Firebase Storage
         const imageList = await listAll(imagesRef);
         
@@ -27,7 +29,9 @@ export default function Biography() {
         console.error('Error fetching images from Firebase:', error);
         setImages([]);
       }
-    };    fetchImagesFromFirebase();
+    };
+    
+    fetchImagesFromFirebase();
   }, []);
 
   return (
