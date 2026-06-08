@@ -1,114 +1,165 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Layout from '../components/Layout';
 import styles from './achievements.module.scss';
 import achievementsData from '../data/achievements.json';
 
-export default function Achievements() {
-  const [visibleSections, setVisibleSections] = useState([]);
-  const [currentItemIndex, setCurrentItemIndex] = useState({});
+const SUBTITLE = 'Milestones earned through discipline, focus, and consistency.';
+
+export default function Achievements({ achievements = [] }) {
+  const [typedSubtitle, setTypedSubtitle] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [pageReady, setPageReady] = useState(false);
+
+  const normalizedAchievements = useMemo(() => {
+    const source = Array.isArray(achievements) && achievements.length > 0
+      ? achievements
+      : achievementsData.achievements;
+
+    if (!Array.isArray(source)) {
+      return [];
+    }
+
+    return source
+      .filter((entry) => entry && typeof entry.category === 'string' && Array.isArray(entry.items))
+      .map((entry) => ({
+        category: entry.category,
+        items: entry.items.filter((item) => typeof item === 'string' && item.trim().length > 0)
+      }))
+      .filter((entry) => entry.items.length > 0);
+  }, [achievements]);
+
+  const totalItems = useMemo(
+    () => normalizedAchievements.reduce((sum, section) => sum + section.items.length, 0),
+    [normalizedAchievements]
+  );
+
+  const yearWiseAchievements = useMemo(() => {
+    const yearMap = new Map();
+    const others = [];
+    const yearPattern = /(19|20)\d{2}/;
+
+    normalizedAchievements.forEach((section) => {
+      const categoryYearMatch = section.category.match(yearPattern);
+      const categoryYear = categoryYearMatch ? categoryYearMatch[0] : null;
+
+      section.items.forEach((item) => {
+        const itemYearMatch = item.match(yearPattern);
+        const year = itemYearMatch ? itemYearMatch[0] : categoryYear;
+
+        if (year) {
+          if (!yearMap.has(year)) {
+            yearMap.set(year, []);
+          }
+          yearMap.get(year).push(item);
+        } else {
+          others.push(item);
+        }
+      });
+    });
+
+    const yearCards = Array.from(yearMap.entries())
+      .sort((a, b) => Number(b[0]) - Number(a[0]))
+      .map(([year, items]) => ({
+        title: `${year} Achievements`,
+        items
+      }));
+
+    if (others.length > 0) {
+      yearCards.push({
+        title: 'Other Achievements',
+        items: others
+      });
+    }
+
+    return yearCards;
+  }, [normalizedAchievements]);
 
   useEffect(() => {
-    // Animate sections appearing one by one
-    achievementsData.achievements.forEach((section, sectionIndex) => {
-      setTimeout(() => {
-        setVisibleSections(prev => [...prev, sectionIndex]);
-        
-        // Animate items within each section
-        section.items.forEach((item, itemIndex) => {
-          setTimeout(() => {
-            setCurrentItemIndex(prev => ({
-              ...prev,
-              [`${sectionIndex}-${itemIndex}`]: true
-            }));
-          }, itemIndex * 200);
-        });
-      }, sectionIndex * 800);
-    });
+    setPageReady(true);
   }, []);
 
-  // Alternative: Typewriter effect for text
-  const TypewriterText = ({ text, delay = 0 }) => {
-    const [displayText, setDisplayText] = useState('');
-    const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    if (!pageReady) {
+      return;
+    }
 
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        if (currentIndex < text.length) {
-          setDisplayText(prev => prev + text[currentIndex]);
-          setCurrentIndex(prev => prev + 1);
-        }
-      }, delay + currentIndex * 50);
+    let index = 0;
+    setIsTyping(true);
+    setTypedSubtitle('');
 
-      return () => clearTimeout(timer);
-    }, [currentIndex, text, delay]);
+    const timer = window.setInterval(() => {
+      index += 1;
+      setTypedSubtitle(SUBTITLE.slice(0, index));
 
-    return <span>{displayText}</span>;
-  };
+      if (index >= SUBTITLE.length) {
+        setIsTyping(false);
+        window.clearInterval(timer);
+      }
+    }, 18);
+
+    return () => window.clearInterval(timer);
+  }, [pageReady]);
 
   return (
     <Layout>
-      <div className={styles.container}>
-        <h1 className={styles.title}>
-          <TypewriterText text="Achievements" delay={100} />
-        </h1>
-        <p className={styles.subtitle}>
-          <TypewriterText 
-            text="Discover Suraj Nalam's world records and medals." 
-            delay={1000} 
-          />
-        </p>
-        
-        <div className={styles.achievementsGrid}>
-          {achievementsData.achievements.map((section, sectionIndex) => (
-            <div 
-              key={sectionIndex}
-              className={`${styles.achievementSection} ${
-                visibleSections.includes(sectionIndex) ? styles.visible : ''
-              }`}
-            >
-              <h2 className={styles.sectionTitle}>{section.category}</h2>
-              <ul className={styles.achievementsList}>
-                {section.items.map((item, itemIndex) => (
-                  <li 
-                    key={itemIndex}
-                    className={`${styles.achievementItem} ${
-                      currentItemIndex[`${sectionIndex}-${itemIndex}`] ? styles.visible : ''
-                    }`}
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+      <section className={styles.pageShell}>
+        <div className={styles.backgroundImage} />
+        <div className={styles.vignette} />
 
-        {/* Interactive Timeline View */}
-        <div className={styles.timelineSection}>
-          <h2>Achievement Timeline</h2>
-          <div className={styles.timeline}>
-            {achievementsData.achievements.map((section, index) => (
-              <div key={index} className={styles.timelineItem}>
-                <div className={styles.timelineMarker}></div>
-                <div className={styles.timelineContent}>
-                  <h3>{section.category}</h3>
-                  <p>{section.items.length} achievements</p>
-                </div>
+        <div className={`${styles.contentWrap} ${pageReady ? styles.ready : ''}`}>
+          <header className={styles.headerBlock}>
+            <p className={styles.kicker}>Performance Archive</p>
+            <h1 className={styles.title}>Achievements</h1>
+            <p className={`${styles.subtitle} ${isTyping ? styles.typing : ''}`}>
+              {typedSubtitle}
+            </p>
+
+            <div className={styles.metricRow}>
+              <div className={styles.metricCard}>
+                <span className={styles.metricValue}>{yearWiseAchievements.length}</span>
+                <span className={styles.metricLabel}>Year Cards</span>
               </div>
-            ))}
-          </div>
+              <div className={styles.metricCard}>
+                <span className={styles.metricValue}>{totalItems}</span>
+                <span className={styles.metricLabel}>Milestones</span>
+              </div>
+            </div>
+          </header>
+
+          {yearWiseAchievements.length === 0 ? (
+            <div className={styles.emptyState}>
+              <h2>No achievements available right now.</h2>
+              <p>Please check back shortly for updated milestones.</p>
+            </div>
+          ) : (
+            <div className={styles.cardsGrid}>
+              {yearWiseAchievements.map((section, index) => (
+                <article className={styles.achievementCard} key={section.title} style={{ animationDelay: `${index * 90}ms` }}>
+                  <div className={styles.cardAccent} />
+                  <h2>{section.title}</h2>
+                  <ul className={styles.timelineList}>
+                    {section.items.map((item) => (
+                      <li key={item} className={styles.timelineItem}>
+                        <span className={styles.checkIcon} aria-hidden="true">✓</span>
+                        <span className={styles.itemText}>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
+      </section>
     </Layout>
   );
 }
 
-// Static props for even faster loading
 export async function getStaticProps() {
   return {
     props: {
-      achievements: achievementsData.achievements
+      achievements: Array.isArray(achievementsData?.achievements) ? achievementsData.achievements : []
     },
-    revalidate: 60 // Revalidate every minute if needed
+    revalidate: 60
   };
 }
