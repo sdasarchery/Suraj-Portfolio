@@ -1153,7 +1153,7 @@ export default function Home() {
           pointerEvents: 'none'
         }}>
           <Image
-            src={isMobile ? '/banner_mobile_img.png' : '/banner_image_new.png'}
+            src={isMobile ? '/new_hero_banner.png' : '/banner_image_new.png'}
             alt="Suraj Nalam Background"
             fill
             style={{

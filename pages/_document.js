@@ -16,7 +16,7 @@ export default function Document() {
 
         <meta
           property="og:image"
-          content="https://res.cloudinary.com/dv8gducrk/image/upload/f_auto,q_auto/dektop_q_a_bg_k0xydg"
+          content="https://res.cloudinary.com/dv8gducrk/image/upload/f_auto,q_auto/DSC09959_jwavez"
         />
 
         <meta property="og:url" content="https://surajnalam.com" />
