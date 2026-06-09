@@ -1153,7 +1153,7 @@ export default function Home() {
           pointerEvents: 'none'
         }}>
           <Image
-            src={isMobile ? '/new_hero_banner.png' : '/banner_image_new.png'}
+            src='/suraj_images/DSC09959.jpg'
             alt="Suraj Nalam Background"
             fill
             style={{
@@ -1185,14 +1185,15 @@ export default function Home() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: isMobile ? 'flex-start' : 'center',
-            alignItems: isMobile ? 'center' : 'flex-end',
-            textAlign: isMobile ? 'center' : 'right',
+            alignItems: 'flex-end',
+            textAlign: 'right',
             transform: `translateY(${Math.min(scrollY * (isMobile ? 0.2 : 0.3), isMobile ? 50 : 100)}px)`,
             opacity: Math.max(1 - (scrollY / 800), 0),
             transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
             color: 'white',
             paddingTop: isMobile ? '0vh' : '0',
-            marginTop: isMobile ? '-2vh' : '0'
+            marginTop: isMobile ? '-2vh' : '0',
+            paddingRight: isMobile ? '2rem' : '4rem'
           }}
         >
           <h1 
@@ -1225,7 +1226,7 @@ export default function Home() {
           paddingTop: isMobile ? '40vh' : undefined,
           paddingBottom: isMobile ? '2rem' : undefined,
           opacity: 1,
-          backgroundImage: `url(${isMobile ? '/achievements-bg-mobile.png' : '/Achievements-bg-2.png'})`,
+          backgroundImage: `url(${isMobile ? '/new_achievements_mobile.png' : '/Achievements-bg-2.png'})`,
           backgroundSize: 'cover',
           backgroundPosition: isMobile ? 'center 18%' : '34% 14%',
           height: isMobile ? 'auto' : '100vh',
@@ -1319,7 +1320,7 @@ export default function Home() {
                 >
                   <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, #ff7a3c 0%, rgba(255, 77, 46, 0.2) 100%)' }} />
                   <div style={{ color: '#fff', fontWeight: 800, fontSize: '0.98rem', marginBottom: '0.45rem' }}>International Medalist</div>
-                  <div style={{ color: '#fff', fontSize: '0.9rem', lineHeight: 1.55 }}>Winnipeg, Canada - 2025 World Archery Youth Championships Silver Medalist ( Silver Mealist 
+                  <div style={{ color: '#fff', fontSize: '0.9rem', lineHeight: 1.55 }}>Winnipeg, Canada - 2025 World Archery Youth Championships Silver Medalist ( Silver Medalist 
                     Team )</div>
                 </div>
 
@@ -1673,7 +1674,7 @@ export default function Home() {
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                       />
-                      <span className="instagram-pill">Open on Instagram</span>
+                      <span className="instagram-pill">Open</span>
                     </div>
                   </a>
                 </div>
