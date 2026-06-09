@@ -98,12 +98,21 @@ const slideAnimationStyles = `
     }
   }
 
-  @keyframes typingFive {
+  @keyframes typingSuraj {
     from {
       width: 0;
     }
     to {
       width: 5.4ch;
+    }
+  }
+
+  @keyframes typingNalam {
+    from {
+      width: 0;
+    }
+    to {
+      width: 6.2ch;
     }
   }
 
@@ -131,11 +140,11 @@ const slideAnimationStyles = `
     width: 0;
     border-right: 2px solid rgba(255, 255, 255, 0.95);
     padding-bottom: 0.18em; /* prevent descenders (j, g, y, p, q) from being clipped */
-    animation: typingFive 1.35s steps(6, end) forwards, blinkCaret 1s step-end infinite;
+    animation: typingSuraj 1.35s steps(6, end) forwards, blinkCaret 1s step-end infinite;
   }
 
   .hero-line-second {
-    animation: typingFive 1.35s steps(6, end) 1.45s forwards, blinkCaret 1s step-end infinite;
+    animation: typingNalam 1.35s steps(6, end) 1.45s forwards, blinkCaret 1s step-end infinite;
   }
 
   .achievement-typewriter {
@@ -1129,7 +1138,8 @@ export default function Home() {
           position: 'relative',
           zIndex: 2,
           background: 'transparent',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          alignItems: isMobile ? 'flex-start' : 'center'
         }}
       >
         {/* Background Image - always absolute so it's clipped within hero */}
@@ -1174,19 +1184,21 @@ export default function Home() {
             zIndex: 3,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: isMobile ? 'flex-start' : 'center',
             alignItems: isMobile ? 'center' : 'flex-end',
             textAlign: isMobile ? 'center' : 'right',
             transform: `translateY(${Math.min(scrollY * (isMobile ? 0.2 : 0.3), isMobile ? 50 : 100)}px)`,
             opacity: Math.max(1 - (scrollY / 800), 0),
             transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
-            color: 'white'
+            color: 'white',
+            paddingTop: isMobile ? '0vh' : '0',
+            marginTop: isMobile ? '-2vh' : '0'
           }}
         >
           <h1 
             className={`${animatedSections.heroContent ? 'animated fade-in delay-200' : ''}`}
             style={{
-              fontSize: 'clamp(4.2rem, 8vw, 7rem)',
+              fontSize: isMobile ? 'clamp(3.5rem, 15vw, 4.5rem)' : 'clamp(4.2rem, 8vw, 7rem)',
               fontWeight: '800',
               marginBottom: '0.5rem',
               color: 'red',
@@ -1210,14 +1222,14 @@ export default function Home() {
           backgroundColor: '#0b0b0b',
           overflow: isMobile ? 'visible' : 'hidden',
           /* Add extra padding on mobile instead of margin/height hacks */
-          paddingTop: isMobile ? '5rem' : undefined,
+          paddingTop: isMobile ? '40vh' : undefined,
           paddingBottom: isMobile ? '2rem' : undefined,
           opacity: 1,
           backgroundImage: `url(${isMobile ? '/achievements-bg-mobile.png' : '/Achievements-bg-2.png'})`,
           backgroundSize: 'cover',
           backgroundPosition: isMobile ? 'center 18%' : '34% 14%',
           height: isMobile ? 'auto' : '100vh',
-          minHeight: isMobile ? 'auto' : '100vh',
+          minHeight: isMobile ? '100vh' : '100vh',
           alignItems: isMobile ? 'flex-end' : 'center',
         }}
       >

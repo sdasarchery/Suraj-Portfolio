@@ -6,12 +6,12 @@ export default function Document() {
       <Head>
         <meta
           property="og:title"
-          content="Suraj Nalam | International Archery Medalist & Software Developer"
+          content="Suraj Nalam | Archer 🏹🎯- International Medalist"
         />
 
         <meta
           property="og:description"
-          content="International Archery Medalist, Software Developer, and Tech Enthusiast."
+          content="Represents The United States of America"
         />
 
         <meta
@@ -26,12 +26,12 @@ export default function Document() {
 
         <meta
           name="twitter:title"
-          content="Suraj Nalam | International Archery Medalist & Software Developer"
+          content="Suraj Nalam | International Archery Medalist"
         />
 
         <meta
           name="twitter:description"
-          content="International Archery Medalist, Software Developer, and Tech Enthusiast."
+          content="Represents The United States of America"
         />
 
         <meta
